@@ -13,7 +13,7 @@ import Footer from '../components/Footer.astro';
       <!-- Header row -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 class="headline-box text-2xl font-semibold text-(--color-ink) tracking-tight">Bill Splitter</h1>
+          <h1 class="text-2xl font-semibold text-(--color-ink) tracking-tight">Bill Splitter</h1>
           <p class="text-sm text-(--color-body) mt-0.5">Add expenses, see who owes whom.</p>
         </div>
         <div class="flex items-center gap-2">
@@ -94,7 +94,7 @@ import Footer from '../components/Footer.astro';
         <div class="lg:col-span-1">
           <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
             <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
-              <h2 class="headline-box text-sm font-medium text-(--color-ink)" data-i18n="members">Members</h2>
+              <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="members">Members</h2>
               <span id="member-count" class="inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 text-xs text-(--color-on-primary) bg-(--color-primary) font-mono rounded-md">0</span>
             </div>
 
@@ -126,7 +126,7 @@ import Footer from '../components/Footer.astro';
           <!-- Tip/tip calculator -->
           <div class="mt-4 bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
             <div class="px-4 py-3 border-b border-(--color-hairline)">
-              <h2 class="headline-box text-sm font-medium text-(--color-ink)">Tip Calculator</h2>
+              <h2 class="text-sm font-medium text-(--color-ink)">Tip Calculator</h2>
             </div>
             <div class="px-4 py-4 space-y-3">
               <div>
@@ -179,7 +179,7 @@ import Footer from '../components/Footer.astro';
             <!-- Add expense form -->
             <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden mb-4">
               <div class="px-4 py-3 border-b border-(--color-hairline)">
-                <h2 class="headline-box text-sm font-medium text-(--color-ink)" data-i18n="addExpense">Add Expense</h2>
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="addExpense">Add Expense</h2>
               </div>
               <div class="px-4 py-4 space-y-3">
                 <div class="grid grid-cols-2 gap-3">
@@ -258,7 +258,7 @@ import Footer from '../components/Footer.astro';
             <!-- Expense list -->
             <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
               <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
-                <h2 class="headline-box text-sm font-medium text-(--color-ink)" data-i18n="allExpenses">All Expenses</h2>
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="allExpenses">All Expenses</h2>
                 <div class="flex items-center gap-3">
                   <span id="expense-count" class="text-xs text-(--color-mute) font-mono">0 items</span>
                   <span id="expense-total-display" class="text-xs font-mono font-medium text-(--color-ink)"></span>
@@ -283,7 +283,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden mb-4">
               <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
-                <h2 class="headline-box text-sm font-medium text-(--color-ink)" data-i18n="settlement">Settlement</h2>
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="settlement">Settlement</h2>
                 <button id="copy-results-btn" class="h-7 px-2.5 text-xs font-medium text-(--color-body) bg-(--color-canvas-soft) border border-(--color-hairline) rounded hover:bg-(--color-canvas-soft-2) transition-colors flex items-center gap-1.5">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="3" width="6" height="6" rx="1" stroke="#888" stroke-width="1.2"/><path d="M3 3V2a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H7" stroke="#888" stroke-width="1.2"/></svg>
                   Copy
@@ -301,7 +301,7 @@ import Footer from '../components/Footer.astro';
             <!-- Per-person balance summary -->
             <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
               <div class="px-4 py-3 border-b border-(--color-hairline)">
-                <h2 class="headline-box text-sm font-medium text-(--color-ink)" data-i18n="balances">Balances</h2>
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="balances">Balances</h2>
               </div>
               <div id="balance-list" class="divide-y divide-(--color-hairline)">
                 <!-- JS rendered -->
