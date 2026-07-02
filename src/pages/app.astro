@@ -131,17 +131,16 @@ import Footer from '../components/Footer.astro';
         <!-- RIGHT: Expenses + Results -->
         <div class="lg:col-span-2 space-y-4">
 
-          <!-- Tab selector -->
-          <div class="flex items-center gap-1 bg-(--color-canvas) border border-(--color-hairline) rounded-lg p-1 shadow-l1 w-fit">
-            <button id="tab-expenses" class="tab-btn active h-7 px-4 text-sm font-medium rounded-md transition-colors">
-              <span data-i18n="expenses">Expenses</span>
-            </button>
-            <button id="tab-results" class="tab-btn h-7 px-4 text-sm font-medium rounded-md transition-colors">
+          <!-- Section label + jump-to-results shortcut -->
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-(--color-ink)" data-i18n="expenses">Expenses</span>
+            <button id="jump-to-results" class="text-xs font-medium text-(--color-link) hover:text-(--color-link-deep) transition-colors flex items-center gap-1">
               <span data-i18n="results">Results</span>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
 
-          <!-- Expenses tab -->
+          <!-- Expenses panel -->
           <div id="panel-expenses">
             <!-- Add expense form -->
             <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden mb-4">
@@ -238,8 +237,12 @@ import Footer from '../components/Footer.astro';
             </div>
           </div>
 
-          <!-- Results tab (hidden by default) -->
-          <div id="panel-results" class="hidden">
+          <!-- Results (always visible, sits after All Expenses) -->
+          <div id="panel-results" class="scroll-mt-20">
+            <div class="flex items-center gap-2 mb-3 mt-2">
+              <span class="text-sm font-medium text-(--color-ink)" data-i18n="results">Results</span>
+              <div class="flex-1 h-px bg-(--color-hairline)"></div>
+            </div>
             <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden mb-4">
               <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
                 <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="settlement">Settlement</h2>
@@ -288,14 +291,6 @@ import Footer from '../components/Footer.astro';
 </Layout>
 
 <style>
-  .tab-btn {
-    color: var(--color-body);
-    background: transparent;
-  }
-  .tab-btn.active {
-    color: var(--color-ink);
-    background: var(--color-canvas-soft-2);
-  }
   .split-type-label input:checked + span {
     background: var(--color-primary);
     color: var(--color-on-primary);
@@ -850,12 +845,12 @@ function addExpense() {
   const category = document.getElementById('exp-category').value;
   const splitType = document.querySelector('input[name="split-type"]:checked')?.value || 'equal';
 
-  if (!paidBy) { alert('Please select who paid.'); return; }
-  if (!amountRaw || amountRaw <= 0) { alert('Please enter a valid amount.'); return; }
+  if (!paidBy) { alert('Please select who paid.'); return false; }
+  if (!amountRaw || amountRaw <= 0) { alert('Please enter a valid amount.'); return false; }
 
   const checkedMembers = [...document.querySelectorAll('.split-member-check:checked')]
     .map(cb => cb.value);
-  if (checkedMembers.length === 0) { alert('Select at least one person to split with.'); return; }
+  if (checkedMembers.length === 0) { alert('Select at least one person to split with.'); return false; }
 
   const splitWith = checkedMembers.map(memberId => {
     const valInput = document.querySelector(`.split-val-input[data-member="${memberId}"]`);
@@ -867,7 +862,7 @@ function addExpense() {
     const total = splitWith.reduce((s, sw) => s + sw.value, 0);
     if (Math.abs(total - 100) > 0.5) {
       alert(`Percentages must add up to 100%. Currently: ${total.toFixed(1)}%`);
-      return;
+      return false;
     }
   }
 
@@ -882,6 +877,7 @@ function addExpense() {
   document.getElementById('exp-amount').value = '';
 
   saveState(); render();
+  return true;
 }
 
 window.removeExpense = function(id) {
@@ -985,20 +981,9 @@ document.addEventListener('DOMContentLoaded', () => {
     saveState(); render();
   });
 
-  // Tab switching
-  document.getElementById('tab-expenses').addEventListener('click', () => {
-    document.getElementById('panel-expenses').classList.remove('hidden');
-    document.getElementById('panel-results').classList.add('hidden');
-    document.getElementById('tab-expenses').classList.add('active');
-    document.getElementById('tab-results').classList.remove('active');
-  });
-
-  document.getElementById('tab-results').addEventListener('click', () => {
-    document.getElementById('panel-results').classList.remove('hidden');
-    document.getElementById('panel-expenses').classList.add('hidden');
-    document.getElementById('tab-results').classList.add('active');
-    document.getElementById('tab-expenses').classList.remove('active');
-    renderResults();
+  // Jump to results section
+  document.getElementById('jump-to-results').addEventListener('click', () => {
+    document.getElementById('panel-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   // Add member
@@ -1030,9 +1015,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add expense
   document.getElementById('add-expense-btn').addEventListener('click', addExpense);
-  document.getElementById('exp-amount').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addExpense();
-  });
+
+  // Press Enter in the expense form to add it, then jump straight to the results
+  function addExpenseAndShowResults(e) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    if (addExpense()) {
+      document.getElementById('panel-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+  document.getElementById('exp-desc').addEventListener('keydown', addExpenseAndShowResults);
+  document.getElementById('exp-amount').addEventListener('keydown', addExpenseAndShowResults);
 
   // Tip calculator
   document.getElementById('tip-subtotal').addEventListener('input', updateTipCalc);
@@ -1052,8 +1045,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (total <= 0) return;
     document.getElementById('exp-desc').value = `Dinner (incl. ${pct}% tip)`;
     document.getElementById('exp-amount').value = total.toFixed(2);
-    // Switch to expenses tab
-    document.getElementById('tab-expenses').click();
     document.getElementById('exp-desc').focus();
   });
 
