@@ -1,0 +1,264 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="BillSplit Calcs — Split Bills Effortlessly.">
+  <Nav currentPath="/" />
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-(--color-canvas) pt-20 pb-32">
+    <!-- Mesh gradient backdrop -->
+    <div class="absolute inset-0 opacity-15 pointer-events-none" aria-hidden="true">
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 60% at 20% 40%, #007cf0 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 20%, #7928ca 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 60% 80%, #ff0080 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 40% 60%, #50e3c2 0%, transparent 50%);"></div>
+    </div>
+
+    <div class="relative max-w-[1400px] mx-auto px-6 text-center">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 mb-8 px-3 py-1.5 bg-(--color-canvas-soft) text-(--color-body) text-sm rounded-full border border-(--color-hairline)">
+        <span class="w-1.5 h-1.5 rounded-full bg-(--color-gradient-develop-start) flex-shrink-0"></span>
+        No signup. No download. Completely free.
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-semibold text-(--color-ink) tracking-[-2.4px] leading-none mb-6 max-w-4xl mx-auto">
+        Split bills with anyone,<br />in any currency.
+      </h1>
+
+      <!-- Body -->
+      <p class="text-lg md:text-xl text-(--color-body) max-w-2xl mx-auto mb-10 leading-7">
+        Add people, add expenses, see who owes whom — instantly. Supports 150+ currencies, 10+ languages, and optimized settlements.
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="/app" class="inline-flex items-center justify-center h-12 px-6 text-base font-medium text-(--color-on-primary) bg-(--color-primary) rounded-full hover:opacity-90 transition-opacity duration-150 min-w-[160px]">
+          Start Splitting
+        </a>
+        <a href="#how-it-works" class="inline-flex items-center justify-center h-12 px-6 text-base font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-full hover:bg-(--color-canvas-soft) transition-colors duration-150 min-w-[160px]">
+          See how it works
+        </a>
+      </div>
+
+      <!-- Social proof numbers -->
+      <div class="flex items-center justify-center gap-8 mt-16 pt-8 border-t border-(--color-hairline)">
+        <div class="text-center">
+          <div class="text-2xl font-semibold text-(--color-ink) tracking-tight">150+</div>
+          <div class="text-xs text-(--color-mute) font-mono mt-1">CURRENCIES</div>
+        </div>
+        <div class="w-px h-8 bg-(--color-hairline)"></div>
+        <div class="text-center">
+          <div class="text-2xl font-semibold text-(--color-ink) tracking-tight">10+</div>
+          <div class="text-xs text-(--color-mute) font-mono mt-1">LANGUAGES</div>
+        </div>
+        <div class="w-px h-8 bg-(--color-hairline)"></div>
+        <div class="text-center">
+          <div class="text-2xl font-semibold text-(--color-ink) tracking-tight">Zero</div>
+          <div class="text-xs text-(--color-mute) font-mono mt-1">SIGNUP NEEDED</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use case tabs -->
+  <section class="bg-(--color-canvas-soft) py-6 border-y border-(--color-hairline)">
+    <div class="max-w-[1400px] mx-auto px-6">
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 justify-center flex-wrap">
+        {['Group Trips', 'Restaurants', 'Shared Housing', 'Events & Parties', 'Gift Pooling', 'Office Lunches'].map((label) => (
+          <span class="inline-flex items-center h-8 px-4 text-sm text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-full whitespace-nowrap hover:border-(--color-hairline-strong) hover:text-(--color-ink) cursor-default transition-colors duration-150">
+            {label}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Features section -->
+  <section id="features" class="bg-(--color-canvas-soft) py-24">
+    <div class="max-w-[1400px] mx-auto px-6">
+      <div class="text-center mb-14">
+        <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Features</div>
+        <h2 class="text-4xl font-semibold text-(--color-ink) tracking-[-1.28px] leading-tight mb-4">
+          Everything you need to settle up.
+        </h2>
+        <p class="text-lg text-(--color-body) max-w-xl mx-auto">
+          Designed to handle the complexity of group expenses without the complexity of a spreadsheet.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-(--color-canvas) rounded-lg p-6 shadow-l2">
+          <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) flex items-center justify-center mb-4">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#171717" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight">Instant calculations.</h3>
+          <p class="text-sm text-(--color-body) leading-relaxed">Results update in real-time as you add expenses. No submit button, no waiting.</p>
+        </div>
+
+        <div class="bg-(--color-canvas) rounded-lg p-6 shadow-l2">
+          <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) flex items-center justify-center mb-4">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight">150+ currencies.</h3>
+          <p class="text-sm text-(--color-body) leading-relaxed">From USD to JPY to NGN. Pick your currency and it's applied everywhere automatically.</p>
+        </div>
+
+        <div class="bg-(--color-canvas) rounded-lg p-6 shadow-l2">
+          <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) flex items-center justify-center mb-4">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight">Flexible split types.</h3>
+          <p class="text-sm text-(--color-body) leading-relaxed">Split equally, by percentage, or by weighted shares. One expense, infinite ways to be fair.</p>
+        </div>
+
+        <div class="bg-(--color-canvas) rounded-lg p-6 shadow-l2">
+          <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) flex items-center justify-center mb-4">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="5" cy="5" r="2" stroke="#171717" stroke-width="1.5"/><circle cx="11" cy="5" r="2" stroke="#171717" stroke-width="1.5"/><circle cx="8" cy="11" r="2" stroke="#171717" stroke-width="1.5"/><path d="M7 6l-1.5 3M9 6l1.5 3" stroke="#171717" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight">Optimized settlements.</h3>
+          <p class="text-sm text-(--color-body) leading-relaxed">Our algorithm minimizes total transactions. Fewer payments, faster settlement for everyone.</p>
+        </div>
+
+        <div class="bg-(--color-canvas) rounded-lg p-6 shadow-l2">
+          <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) flex items-center justify-center mb-4">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 6L14 8L10 10" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 8H6C4.343 8 3 6.657 3 5V5" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight">Shareable links.</h3>
+          <p class="text-sm text-(--color-body) leading-relaxed">Your bill is encoded in the URL. Share via any messenger — everyone sees the exact same data.</p>
+        </div>
+
+        <div class="bg-(--color-canvas) rounded-lg p-6 shadow-l2">
+          <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) flex items-center justify-center mb-4">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="2" stroke="#171717" stroke-width="1.5"/><path d="M2 7h12" stroke="#171717" stroke-width="1.5"/></svg>
+          </div>
+          <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight">Multi-language UI.</h3>
+          <p class="text-sm text-(--color-body) leading-relaxed">Switch the interface to your preferred language. 10+ languages with RTL support included.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" class="bg-(--color-primary) py-24">
+    <div class="max-w-[1400px] mx-auto px-6">
+      <div class="text-center mb-14">
+        <div class="font-mono text-xs uppercase tracking-widest text-white/40 mb-3">How it works</div>
+        <h2 class="text-4xl font-semibold text-(--color-on-primary) tracking-[-1.28px] leading-tight">
+          Three steps to settled.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white/5 border border-white/10 rounded-lg p-8">
+          <div class="font-mono text-xs text-white/40 mb-4">01</div>
+          <h3 class="text-xl font-semibold text-(--color-on-primary) tracking-tight mb-3">Add your group.</h3>
+          <p class="text-sm text-white/60 leading-relaxed">Name your group and add everyone splitting — nicknames work fine. Pick your currency and language.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-8">
+          <div class="font-mono text-xs text-white/40 mb-4">02</div>
+          <h3 class="text-xl font-semibold text-(--color-on-primary) tracking-tight mb-3">Log the expenses.</h3>
+          <p class="text-sm text-white/60 leading-relaxed">Enter who paid, how much, and who it covers. Exclude people from specific items. Equal, percentage, or share-based splits.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-lg p-8">
+          <div class="font-mono text-xs text-white/40 mb-4">03</div>
+          <h3 class="text-xl font-semibold text-(--color-on-primary) tracking-tight mb-3">See who owes whom.</h3>
+          <p class="text-sm text-white/60 leading-relaxed">Get an optimized settlement plan that minimizes total transactions. Copy to clipboard or share via link instantly.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="/app" class="inline-flex items-center justify-center h-12 px-8 text-base font-medium text-(--color-on-primary) border border-white/20 rounded-full hover:bg-white/10 transition-colors duration-150">
+          Try it now — it's free
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Split type spotlight -->
+  <section class="bg-(--color-canvas-soft) py-24">
+    <div class="max-w-[1400px] mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Split types</div>
+          <h2 class="text-4xl font-semibold text-(--color-ink) tracking-[-1.28px] leading-tight mb-4">
+            Fair doesn't always mean equal.
+          </h2>
+          <p class="text-lg text-(--color-body) mb-8 leading-7">
+            Different situations call for different fairness. A shared Airbnb where one person gets the master suite? Use weighted shares. Someone skipped the wine? Exclude them from that expense.
+          </p>
+          <div class="space-y-4">
+            {[
+              { label: 'Equal split', desc: 'Divide the total evenly among all participants.' },
+              { label: 'Percentage split', desc: 'Assign exact percentages to each person.' },
+              { label: 'Share-based split', desc: 'Give people different weight multipliers.' },
+              { label: 'Custom exclusion', desc: 'Remove specific people from specific expenses.' },
+            ].map((item) => (
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-(--color-primary) flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-(--color-ink)">{item.label}</span>
+                  <span class="text-sm text-(--color-body)"> — {item.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Code mockup -->
+        <div class="bg-(--color-primary) rounded-xl p-6 font-mono text-sm shadow-l4">
+          <div class="text-white/40 text-xs mb-4"># example — dinner for 4</div>
+          <div class="space-y-3">
+            <div class="flex justify-between text-white/80">
+              <span>Total bill</span>
+              <span class="text-white">$128.00</span>
+            </div>
+            <div class="border-t border-white/10 pt-3 space-y-2">
+              <div class="flex justify-between text-white/60 text-xs">
+                <span>Alice (2 shares)</span>
+                <span class="text-(--color-cyan)">$42.67</span>
+              </div>
+              <div class="flex justify-between text-white/60 text-xs">
+                <span>Bob (2 shares)</span>
+                <span class="text-(--color-cyan)">$42.67</span>
+              </div>
+              <div class="flex justify-between text-white/60 text-xs">
+                <span>Carol (1 share)</span>
+                <span class="text-(--color-cyan)">$21.33</span>
+              </div>
+              <div class="flex justify-between text-white/60 text-xs">
+                <span>Dave (1 share)</span>
+                <span class="text-(--color-cyan)">$21.33</span>
+              </div>
+            </div>
+            <div class="border-t border-white/10 pt-3">
+              <div class="text-white/40 text-xs mb-2"># settlement (2 payments total)</div>
+              <div class="text-white/80 text-xs">Carol → Alice  $21.33</div>
+              <div class="text-white/80 text-xs">Dave → Bob     $21.33</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="bg-(--color-canvas) border-t border-(--color-hairline) py-24">
+    <div class="max-w-[1400px] mx-auto px-6 text-center">
+      <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-4">Ready?</div>
+      <h2 class="text-4xl md:text-5xl font-semibold text-(--color-ink) tracking-[-1.6px] leading-tight mb-6">
+        Stop arguing about money.
+      </h2>
+      <p class="text-lg text-(--color-body) mb-10 max-w-lg mx-auto">
+        Takes 30 seconds to set up. No account, no app download, no spreadsheet.
+      </p>
+      <a href="/app" class="inline-flex items-center justify-center h-12 px-8 text-base font-medium text-(--color-on-primary) bg-(--color-primary) rounded-full hover:opacity-90 transition-opacity duration-150">
+        Start Splitting — it's free
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

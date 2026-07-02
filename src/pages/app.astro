@@ -1,0 +1,1076 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Bill Splitter — BillSplit Calcs">
+  <Nav currentPath="/app" />
+
+  <main class="min-h-screen bg-(--color-canvas-soft) py-8 px-4">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Header row -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl font-semibold text-(--color-ink) tracking-tight">Bill Splitter</h1>
+          <p class="text-sm text-(--color-body) mt-0.5">Add expenses, see who owes whom.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Language selector -->
+          <select id="lang-select" class="custom-select h-8 pl-3 pr-8 text-xs text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-md appearance-none cursor-pointer hover:border-(--color-hairline-strong) transition-colors focus:outline-none focus:ring-1 focus:ring-(--color-primary)">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+            <option value="ja">日本語</option>
+            <option value="zh">中文</option>
+            <option value="hi">हिंदी</option>
+            <option value="ar">العربية</option>
+            <option value="ko">한국어</option>
+            <option value="it">Italiano</option>
+          </select>
+
+          <!-- Currency selector -->
+          <select id="currency-select" class="custom-select h-8 pl-3 pr-8 text-xs text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-md appearance-none cursor-pointer hover:border-(--color-hairline-strong) transition-colors focus:outline-none focus:ring-1 focus:ring-(--color-primary)">
+          </select>
+
+          <!-- Share button -->
+          <button id="share-btn" class="h-8 px-3 text-xs font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-md hover:bg-(--color-canvas-soft-2) transition-colors flex items-center gap-1.5">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 1.5L10.5 3 9 4.5" stroke="#171717" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 3H4.5C3.119 3 2 4.119 2 5.5V5.5" stroke="#171717" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <span data-i18n="share">Share</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Group name -->
+      <div class="mb-6">
+        <input
+          id="group-name"
+          type="text"
+          placeholder="Group name (e.g. Tokyo Trip 2026)"
+          class="w-full h-10 px-3 text-sm text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!-- LEFT: Members panel -->
+        <div class="lg:col-span-1">
+          <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
+              <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="members">Members</h2>
+              <span id="member-count" class="text-xs text-(--color-mute) font-mono">0</span>
+            </div>
+
+            <!-- Member list -->
+            <div id="member-list" class="divide-y divide-(--color-hairline) min-h-[80px]">
+              <!-- JS rendered -->
+            </div>
+
+            <!-- Add member form -->
+            <div class="px-4 py-3 border-t border-(--color-hairline)">
+              <div class="flex gap-2">
+                <input
+                  id="new-member-input"
+                  type="text"
+                  placeholder="Name..."
+                  maxlength="30"
+                  class="flex-1 h-8 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors"
+                />
+                <button
+                  id="add-member-btn"
+                  class="h-8 px-3 text-xs font-medium text-(--color-on-primary) bg-(--color-primary) rounded-md hover:opacity-90 transition-opacity"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tip/tip calculator -->
+          <div class="mt-4 bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline)">
+              <h2 class="text-sm font-medium text-(--color-ink)">Tip Calculator</h2>
+            </div>
+            <div class="px-4 py-4 space-y-3">
+              <div>
+                <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Subtotal</label>
+                <div class="relative">
+                  <span id="tip-currency-symbol" class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-(--color-mute)">$</span>
+                  <input id="tip-subtotal" type="number" min="0" step="0.01" placeholder="0.00" class="w-full h-8 pl-7 pr-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Tip %</label>
+                <div class="flex gap-1.5 mb-2">
+                  {[10, 15, 18, 20, 25].map((pct) => (
+                    <button class="tip-preset h-7 px-2 text-xs text-(--color-body) bg-(--color-canvas-soft-2) border border-(--color-hairline) rounded hover:bg-(--color-primary) hover:text-white hover:border-transparent transition-colors" data-pct={pct}>{pct}%</button>
+                  ))}
+                </div>
+                <input id="tip-pct" type="number" min="0" max="100" step="1" placeholder="15" class="w-full h-8 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md focus:outline-none focus:ring-1 focus:ring-(--color-primary) transition-colors" />
+              </div>
+              <div class="bg-(--color-canvas-soft-2) rounded-md px-3 py-2.5 space-y-1.5">
+                <div class="flex justify-between text-xs">
+                  <span class="text-(--color-body)">Tip</span>
+                  <span id="tip-amount" class="font-mono text-(--color-ink)">—</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-(--color-body)">Total</span>
+                  <span id="tip-total" class="font-mono font-medium text-(--color-ink)">—</span>
+                </div>
+              </div>
+              <button id="add-tip-expense" class="w-full h-8 text-xs font-medium text-(--color-ink) border border-(--color-hairline) rounded-md hover:bg-(--color-canvas-soft-2) transition-colors">
+                Add total as expense →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Expenses + Results -->
+        <div class="lg:col-span-2 space-y-4">
+
+          <!-- Tab selector -->
+          <div class="flex items-center gap-1 bg-(--color-canvas) border border-(--color-hairline) rounded-lg p-1 shadow-l1 w-fit">
+            <button id="tab-expenses" class="tab-btn active h-7 px-4 text-sm font-medium rounded-md transition-colors">
+              <span data-i18n="expenses">Expenses</span>
+            </button>
+            <button id="tab-results" class="tab-btn h-7 px-4 text-sm font-medium rounded-md transition-colors">
+              <span data-i18n="results">Results</span>
+            </button>
+          </div>
+
+          <!-- Expenses tab -->
+          <div id="panel-expenses">
+            <!-- Add expense form -->
+            <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden mb-4">
+              <div class="px-4 py-3 border-b border-(--color-hairline)">
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="addExpense">Add Expense</h2>
+              </div>
+              <div class="px-4 py-4 space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1" data-i18n="description">Description</label>
+                    <input id="exp-desc" type="text" placeholder="e.g. Dinner at Sushi Bar" class="w-full h-9 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1" data-i18n="amount">Amount</label>
+                    <div class="relative">
+                      <span id="exp-currency-symbol" class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-(--color-mute)">$</span>
+                      <input id="exp-amount" type="number" min="0" step="0.01" placeholder="0.00" class="w-full h-9 pl-7 pr-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1" data-i18n="paidBy">Paid by</label>
+                    <select id="exp-paid-by" class="custom-select w-full h-9 pl-3 pr-8 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors">
+                      <option value="">Select person...</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Category</label>
+                    <select id="exp-category" class="custom-select w-full h-9 pl-3 pr-8 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-(--color-primary) transition-colors">
+                      <option value="general">General</option>
+                      <option value="food">Food & Drink</option>
+                      <option value="transport">Transport</option>
+                      <option value="accommodation">Accommodation</option>
+                      <option value="entertainment">Entertainment</option>
+                      <option value="shopping">Shopping</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Split type -->
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1.5" data-i18n="splitType">Split type</label>
+                  <div class="flex gap-1.5">
+                    {[
+                      { value: 'equal', label: 'Equal' },
+                      { value: 'percentage', label: 'Percentage' },
+                      { value: 'shares', label: 'Shares' },
+                    ].map(({ value, label }) => (
+                      <label class="split-type-label flex-1 cursor-pointer">
+                        <input type="radio" name="split-type" value={value} class="sr-only" checked={value === 'equal'} />
+                        <span class="flex items-center justify-center h-8 text-xs font-medium border border-(--color-hairline) rounded-md transition-colors hover:border-(--color-hairline-strong)">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Split with (who is included) -->
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide" data-i18n="splitWith">Split with</label>
+                    <button id="toggle-all-members" class="text-xs text-(--color-link) hover:text-(--color-link-deep) transition-colors">All</button>
+                  </div>
+                  <div id="split-with-list" class="space-y-1.5 max-h-48 overflow-y-auto">
+                    <!-- JS rendered: checkboxes per member with optional value input -->
+                  </div>
+                  <div id="split-with-empty" class="text-xs text-(--color-mute) py-2">Add members first.</div>
+                </div>
+
+                <button id="add-expense-btn" class="w-full h-9 text-sm font-medium text-(--color-on-primary) bg-(--color-primary) rounded-md hover:opacity-90 transition-opacity">
+                  Add Expense
+                </button>
+              </div>
+            </div>
+
+            <!-- Expense list -->
+            <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+              <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="allExpenses">All Expenses</h2>
+                <div class="flex items-center gap-3">
+                  <span id="expense-count" class="text-xs text-(--color-mute) font-mono">0 items</span>
+                  <span id="expense-total-display" class="text-xs font-mono font-medium text-(--color-ink)"></span>
+                </div>
+              </div>
+              <div id="expense-list" class="divide-y divide-(--color-hairline) min-h-[60px]">
+                <!-- JS rendered -->
+              </div>
+              <div id="expense-empty" class="px-4 py-8 text-center">
+                <div class="text-sm text-(--color-mute)">No expenses yet.</div>
+                <div class="text-xs text-(--color-mute) mt-1">Add your first expense above.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results tab (hidden by default) -->
+          <div id="panel-results" class="hidden">
+            <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden mb-4">
+              <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="settlement">Settlement</h2>
+                <button id="copy-results-btn" class="h-7 px-2.5 text-xs font-medium text-(--color-body) bg-(--color-canvas-soft) border border-(--color-hairline) rounded hover:bg-(--color-canvas-soft-2) transition-colors flex items-center gap-1.5">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="3" width="6" height="6" rx="1" stroke="#888" stroke-width="1.2"/><path d="M3 3V2a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H7" stroke="#888" stroke-width="1.2"/></svg>
+                  Copy
+                </button>
+              </div>
+              <div id="settlement-list" class="divide-y divide-(--color-hairline)">
+                <!-- JS rendered -->
+              </div>
+              <div id="settlement-empty" class="px-4 py-8 text-center">
+                <div class="text-sm text-(--color-mute)">No settlements needed.</div>
+                <div class="text-xs text-(--color-mute) mt-1">Everyone is even, or add some expenses first.</div>
+              </div>
+            </div>
+
+            <!-- Per-person balance summary -->
+            <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+              <div class="px-4 py-3 border-b border-(--color-hairline)">
+                <h2 class="text-sm font-medium text-(--color-ink)" data-i18n="balances">Balances</h2>
+              </div>
+              <div id="balance-list" class="divide-y divide-(--color-hairline)">
+                <!-- JS rendered -->
+              </div>
+              <div id="balance-empty" class="px-4 py-8 text-center">
+                <div class="text-sm text-(--color-mute)">Add members and expenses to see balances.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Reset button -->
+      <div class="mt-6 text-center">
+        <button id="reset-btn" class="text-xs text-(--color-mute) hover:text-(--color-error) transition-colors underline underline-offset-2">
+          Reset & start over
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .tab-btn {
+    color: var(--color-body);
+    background: transparent;
+  }
+  .tab-btn.active {
+    color: var(--color-ink);
+    background: var(--color-canvas-soft-2);
+  }
+  .split-type-label input:checked + span {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+  }
+  :global(.custom-select) {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+</style>
+
+<script>
+// ─── i18n translations ───────────────────────────────────────────────────────
+const TRANSLATIONS = {
+  en: {
+    members: 'Members', expenses: 'Expenses', results: 'Results',
+    addExpense: 'Add Expense', description: 'Description', amount: 'Amount',
+    paidBy: 'Paid by', splitType: 'Split type', splitWith: 'Split with',
+    allExpenses: 'All Expenses', settlement: 'Settlement', balances: 'Balances',
+    share: 'Share', noExpenses: 'No expenses yet.',
+    owes: 'owes', settled: 'All settled up!', addFirst: 'Add members first.',
+    copied: 'Copied!', resetConfirm: 'Reset everything? This cannot be undone.',
+  },
+  es: {
+    members: 'Miembros', expenses: 'Gastos', results: 'Resultados',
+    addExpense: 'Agregar Gasto', description: 'Descripción', amount: 'Monto',
+    paidBy: 'Pagado por', splitType: 'Tipo de división', splitWith: 'Dividir con',
+    allExpenses: 'Todos los Gastos', settlement: 'Liquidación', balances: 'Balances',
+    share: 'Compartir', noExpenses: 'Sin gastos aún.',
+    owes: 'debe', settled: '¡Todo liquidado!', addFirst: 'Agrega miembros primero.',
+    copied: '¡Copiado!', resetConfirm: '¿Reiniciar todo? No se puede deshacer.',
+  },
+  fr: {
+    members: 'Membres', expenses: 'Dépenses', results: 'Résultats',
+    addExpense: 'Ajouter une dépense', description: 'Description', amount: 'Montant',
+    paidBy: 'Payé par', splitType: 'Type de partage', splitWith: 'Partager avec',
+    allExpenses: 'Toutes les dépenses', settlement: 'Règlement', balances: 'Soldes',
+    share: 'Partager', noExpenses: 'Pas encore de dépenses.',
+    owes: 'doit', settled: 'Tout est réglé!', addFirst: 'Ajoutez des membres d\'abord.',
+    copied: 'Copié!', resetConfirm: 'Tout réinitialiser? Cela ne peut pas être annulé.',
+  },
+  de: {
+    members: 'Mitglieder', expenses: 'Ausgaben', results: 'Ergebnisse',
+    addExpense: 'Ausgabe hinzufügen', description: 'Beschreibung', amount: 'Betrag',
+    paidBy: 'Bezahlt von', splitType: 'Teilungstyp', splitWith: 'Teilen mit',
+    allExpenses: 'Alle Ausgaben', settlement: 'Abrechnung', balances: 'Guthaben',
+    share: 'Teilen', noExpenses: 'Noch keine Ausgaben.',
+    owes: 'schuldet', settled: 'Alles ausgeglichen!', addFirst: 'Erst Mitglieder hinzufügen.',
+    copied: 'Kopiert!', resetConfirm: 'Alles zurücksetzen? Dies kann nicht rückgängig gemacht werden.',
+  },
+  pt: {
+    members: 'Membros', expenses: 'Despesas', results: 'Resultados',
+    addExpense: 'Adicionar Despesa', description: 'Descrição', amount: 'Valor',
+    paidBy: 'Pago por', splitType: 'Tipo de divisão', splitWith: 'Dividir com',
+    allExpenses: 'Todas as Despesas', settlement: 'Liquidação', balances: 'Saldos',
+    share: 'Compartilhar', noExpenses: 'Sem despesas ainda.',
+    owes: 'deve', settled: 'Tudo liquidado!', addFirst: 'Adicione membros primeiro.',
+    copied: 'Copiado!', resetConfirm: 'Redefinir tudo? Isso não pode ser desfeito.',
+  },
+  ja: {
+    members: 'メンバー', expenses: '支出', results: '結果',
+    addExpense: '支出を追加', description: '説明', amount: '金額',
+    paidBy: '支払者', splitType: '分割タイプ', splitWith: '分割相手',
+    allExpenses: 'すべての支出', settlement: '精算', balances: '残高',
+    share: '共有', noExpenses: '支出はまだありません。',
+    owes: 'は', settled: '全員精算済み！', addFirst: '先にメンバーを追加してください。',
+    copied: 'コピーしました！', resetConfirm: 'すべてリセットしますか？元に戻せません。',
+  },
+  zh: {
+    members: '成员', expenses: '费用', results: '结果',
+    addExpense: '添加费用', description: '描述', amount: '金额',
+    paidBy: '付款人', splitType: '分摊类型', splitWith: '分摊给',
+    allExpenses: '所有费用', settlement: '结算', balances: '余额',
+    share: '分享', noExpenses: '暂无费用。',
+    owes: '欠', settled: '全部结清！', addFirst: '请先添加成员。',
+    copied: '已复制！', resetConfirm: '重置所有内容？此操作无法撤销。',
+  },
+  hi: {
+    members: 'सदस्य', expenses: 'खर्च', results: 'परिणाम',
+    addExpense: 'खर्च जोड़ें', description: 'विवरण', amount: 'राशि',
+    paidBy: 'भुगतान करने वाला', splitType: 'विभाजन प्रकार', splitWith: 'किसके साथ बाँटें',
+    allExpenses: 'सभी खर्च', settlement: 'निपटान', balances: 'बैलेंस',
+    share: 'साझा करें', noExpenses: 'अभी तक कोई खर्च नहीं।',
+    owes: 'का', settled: 'सब बराबर!', addFirst: 'पहले सदस्य जोड़ें।',
+    copied: 'कॉपी हो गया!', resetConfirm: 'सब कुछ रीसेट करें? यह पूर्ववत नहीं किया जा सकता।',
+  },
+  ar: {
+    members: 'الأعضاء', expenses: 'المصاريف', results: 'النتائج',
+    addExpense: 'إضافة مصروف', description: 'الوصف', amount: 'المبلغ',
+    paidBy: 'دفع بواسطة', splitType: 'نوع التقسيم', splitWith: 'تقسيم مع',
+    allExpenses: 'جميع المصاريف', settlement: 'التسوية', balances: 'الأرصدة',
+    share: 'مشاركة', noExpenses: 'لا مصاريف حتى الآن.',
+    owes: 'مدين لـ', settled: 'الجميع متساوون!', addFirst: 'أضف أعضاء أولاً.',
+    copied: 'تم النسخ!', resetConfirm: 'إعادة تعيين كل شيء؟ لا يمكن التراجع.',
+  },
+  ko: {
+    members: '멤버', expenses: '지출', results: '결과',
+    addExpense: '지출 추가', description: '설명', amount: '금액',
+    paidBy: '지불자', splitType: '분할 유형', splitWith: '분할 대상',
+    allExpenses: '모든 지출', settlement: '정산', balances: '잔액',
+    share: '공유', noExpenses: '지출이 아직 없습니다.',
+    owes: '에게', settled: '모두 정산 완료!', addFirst: '먼저 멤버를 추가하세요.',
+    copied: '복사됨!', resetConfirm: '모든 것을 재설정하시겠습니까? 되돌릴 수 없습니다.',
+  },
+  it: {
+    members: 'Membri', expenses: 'Spese', results: 'Risultati',
+    addExpense: 'Aggiungi spesa', description: 'Descrizione', amount: 'Importo',
+    paidBy: 'Pagato da', splitType: 'Tipo di divisione', splitWith: 'Dividi con',
+    allExpenses: 'Tutte le spese', settlement: 'Saldo', balances: 'Bilanci',
+    share: 'Condividi', noExpenses: 'Nessuna spesa ancora.',
+    owes: 'deve a', settled: 'Tutti in pari!', addFirst: 'Aggiungi prima i membri.',
+    copied: 'Copiato!', resetConfirm: 'Resetta tutto? Non è possibile annullare.',
+  },
+};
+
+// ─── Currency list ────────────────────────────────────────────────────────────
+const CURRENCIES = [
+  { code: 'USD', symbol: '$', name: 'US Dollar' },
+  { code: 'EUR', symbol: '€', name: 'Euro' },
+  { code: 'GBP', symbol: '£', name: 'British Pound' },
+  { code: 'JPY', symbol: '¥', name: 'Japanese Yen' },
+  { code: 'CNY', symbol: '¥', name: 'Chinese Yuan' },
+  { code: 'INR', symbol: '₹', name: 'Indian Rupee' },
+  { code: 'KRW', symbol: '₩', name: 'South Korean Won' },
+  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar' },
+  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar' },
+  { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc' },
+  { code: 'HKD', symbol: 'HK$', name: 'Hong Kong Dollar' },
+  { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar' },
+  { code: 'MXN', symbol: 'MX$', name: 'Mexican Peso' },
+  { code: 'BRL', symbol: 'R$', name: 'Brazilian Real' },
+  { code: 'ARS', symbol: 'AR$', name: 'Argentine Peso' },
+  { code: 'ZAR', symbol: 'R', name: 'South African Rand' },
+  { code: 'NGN', symbol: '₦', name: 'Nigerian Naira' },
+  { code: 'EGP', symbol: 'E£', name: 'Egyptian Pound' },
+  { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham' },
+  { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal' },
+  { code: 'TRY', symbol: '₺', name: 'Turkish Lira' },
+  { code: 'RUB', symbol: '₽', name: 'Russian Ruble' },
+  { code: 'IDR', symbol: 'Rp', name: 'Indonesian Rupiah' },
+  { code: 'THB', symbol: '฿', name: 'Thai Baht' },
+  { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit' },
+  { code: 'PHP', symbol: '₱', name: 'Philippine Peso' },
+  { code: 'VND', symbol: '₫', name: 'Vietnamese Dong' },
+  { code: 'PKR', symbol: '₨', name: 'Pakistani Rupee' },
+  { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka' },
+  { code: 'SEK', symbol: 'kr', name: 'Swedish Krona' },
+  { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone' },
+  { code: 'DKK', symbol: 'kr', name: 'Danish Krone' },
+  { code: 'PLN', symbol: 'zł', name: 'Polish Złoty' },
+  { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna' },
+  { code: 'HUF', symbol: 'Ft', name: 'Hungarian Forint' },
+  { code: 'RON', symbol: 'lei', name: 'Romanian Leu' },
+  { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar' },
+  { code: 'ILS', symbol: '₪', name: 'Israeli Shekel' },
+  { code: 'CLP', symbol: 'CL$', name: 'Chilean Peso' },
+  { code: 'COP', symbol: 'CO$', name: 'Colombian Peso' },
+  { code: 'PEN', symbol: 'S/', name: 'Peruvian Sol' },
+  { code: 'UYU', symbol: '$U', name: 'Uruguayan Peso' },
+  { code: 'KWD', symbol: 'KD', name: 'Kuwaiti Dinar' },
+  { code: 'QAR', symbol: 'QR', name: 'Qatari Riyal' },
+  { code: 'OMR', symbol: 'OMR', name: 'Omani Rial' },
+  { code: 'BHD', symbol: 'BD', name: 'Bahraini Dinar' },
+  { code: 'MAD', symbol: 'MAD', name: 'Moroccan Dirham' },
+  { code: 'TND', symbol: 'TND', name: 'Tunisian Dinar' },
+  { code: 'GHS', symbol: 'GH₵', name: 'Ghanaian Cedi' },
+  { code: 'KES', symbol: 'KSh', name: 'Kenyan Shilling' },
+  { code: 'ETB', symbol: 'Br', name: 'Ethiopian Birr' },
+  { code: 'UAH', symbol: '₴', name: 'Ukrainian Hryvnia' },
+  { code: 'BGN', symbol: 'лв', name: 'Bulgarian Lev' },
+  { code: 'HRK', symbol: 'kn', name: 'Croatian Kuna' },
+  { code: 'ISK', symbol: 'kr', name: 'Icelandic Króna' },
+  { code: 'LKR', symbol: '₨', name: 'Sri Lankan Rupee' },
+  { code: 'NPR', symbol: '₨', name: 'Nepalese Rupee' },
+  { code: 'MMK', symbol: 'K', name: 'Myanmar Kyat' },
+  { code: 'KHR', symbol: '៛', name: 'Cambodian Riel' },
+  { code: 'TWD', symbol: 'NT$', name: 'Taiwan Dollar' },
+];
+
+// ─── Category icons ───────────────────────────────────────────────────────────
+const CATEGORY_ICONS = {
+  general: '📦', food: '🍽️', transport: '🚗',
+  accommodation: '🏠', entertainment: '🎭', shopping: '🛍️', other: '📌',
+};
+
+// ─── Member emoji avatars ─────────────────────────────────────────────────────
+const AVATARS = ['😀','🙂','😎','🤓','🤩','😄','🧑','👩','👨','🦊','🐼','🐙','🦁','🐸','🐧'];
+
+// ─── Utility: generate ID ─────────────────────────────────────────────────────
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let state = {
+  id: uid(),
+  name: '',
+  currency: CURRENCIES[0],
+  language: 'en',
+  members: [],
+  expenses: [],
+};
+
+function t(key) {
+  const lang = state.language;
+  return (TRANSLATIONS[lang] || TRANSLATIONS.en)[key] || key;
+}
+
+// ─── Persistence ─────────────────────────────────────────────────────────────
+function saveState() {
+  try {
+    localStorage.setItem('bsc_state', JSON.stringify(state));
+    const encoded = btoa(JSON.stringify(state));
+    history.replaceState(null, '', `/app#${encoded}`);
+  } catch (_) {}
+}
+
+function loadState() {
+  try {
+    const hash = location.hash.slice(1);
+    if (hash) {
+      const parsed = JSON.parse(atob(hash));
+      if (parsed && parsed.id) { state = parsed; return; }
+    }
+  } catch (_) {}
+  try {
+    const saved = localStorage.getItem('bsc_state');
+    if (saved) { state = JSON.parse(saved); return; }
+  } catch (_) {}
+}
+
+// ─── Settlement algorithm ────────────────────────────────────────────────────
+function computeBalances() {
+  const balances = {};
+  state.members.forEach(m => { balances[m.id] = 0; });
+
+  state.expenses.forEach(exp => {
+    const { amount, paidBy, splitType, splitWith } = exp;
+    if (!splitWith || splitWith.length === 0) return;
+
+    // compute each person's share
+    const shares = computeShares(amount, splitType, splitWith);
+    shares.forEach(({ memberId, share }) => {
+      if (balances[memberId] !== undefined) balances[memberId] -= share;
+    });
+    if (balances[paidBy] !== undefined) balances[paidBy] += amount;
+  });
+
+  return balances;
+}
+
+function computeShares(amount, splitType, splitWith) {
+  if (splitType === 'equal') {
+    const share = amount / splitWith.length;
+    return splitWith.map(({ memberId }) => ({ memberId, share }));
+  } else if (splitType === 'percentage') {
+    return splitWith.map(({ memberId, value }) => ({
+      memberId, share: amount * (value / 100),
+    }));
+  } else { // shares
+    const totalShares = splitWith.reduce((s, { value }) => s + (value || 1), 0);
+    return splitWith.map(({ memberId, value }) => ({
+      memberId, share: amount * ((value || 1) / totalShares),
+    }));
+  }
+}
+
+function computeSettlements(balances) {
+  const eps = 0.005;
+  const creditors = [];
+  const debtors = [];
+
+  Object.entries(balances).forEach(([id, bal]) => {
+    if (bal > eps) creditors.push({ id, amount: bal });
+    else if (bal < -eps) debtors.push({ id, amount: -bal });
+  });
+
+  creditors.sort((a, b) => b.amount - a.amount);
+  debtors.sort((a, b) => b.amount - a.amount);
+
+  const settlements = [];
+  let ci = 0, di = 0;
+
+  while (ci < creditors.length && di < debtors.length) {
+    const cred = creditors[ci];
+    const debt = debtors[di];
+    const transfer = Math.min(cred.amount, debt.amount);
+
+    settlements.push({
+      from: debt.id,
+      to: cred.id,
+      amount: transfer,
+    });
+
+    cred.amount -= transfer;
+    debt.amount -= transfer;
+
+    if (cred.amount < eps) ci++;
+    if (debt.amount < eps) di++;
+  }
+
+  return settlements;
+}
+
+// ─── Format currency ─────────────────────────────────────────────────────────
+function fmt(amount) {
+  const sym = state.currency.symbol;
+  const code = state.currency.code;
+  try {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency', currency: code, minimumFractionDigits: 2, maximumFractionDigits: 2,
+    }).format(amount);
+  } catch (_) {
+    return `${sym}${amount.toFixed(2)}`;
+  }
+}
+
+// ─── DOM helpers ─────────────────────────────────────────────────────────────
+function getMember(id) { return state.members.find(m => m.id === id); }
+function getMemberName(id) { return getMember(id)?.name || id; }
+
+// ─── Render: members ─────────────────────────────────────────────────────────
+function renderMembers() {
+  const list = document.getElementById('member-list');
+  const count = document.getElementById('member-count');
+  count.textContent = String(state.members.length);
+
+  list.innerHTML = state.members.map(m => `
+    <div class="flex items-center gap-3 px-4 py-2.5 group hover:bg-(--color-canvas-soft) transition-colors">
+      <span class="text-lg leading-none">${m.emoji}</span>
+      <span class="flex-1 text-sm text-(--color-ink)">${escHtml(m.name)}</span>
+      <button
+        onclick="removeMember('${m.id}')"
+        class="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center text-(--color-mute) hover:text-(--color-error) transition-all rounded"
+        title="Remove"
+      >
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  `).join('');
+
+  renderSplitWith();
+  renderPaidBySelect();
+}
+
+// ─── Render: paid-by select ──────────────────────────────────────────────────
+function renderPaidBySelect() {
+  const sel = document.getElementById('exp-paid-by');
+  const curVal = sel.value;
+  sel.innerHTML = `<option value="">Select person...</option>` +
+    state.members.map(m => `<option value="${m.id}" ${m.id === curVal ? 'selected' : ''}>${escHtml(m.name)}</option>`).join('');
+}
+
+// ─── Render: split-with ──────────────────────────────────────────────────────
+function renderSplitWith() {
+  const container = document.getElementById('split-with-list');
+  const empty = document.getElementById('split-with-empty');
+  const splitType = document.querySelector('input[name="split-type"]:checked')?.value || 'equal';
+
+  if (state.members.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  container.innerHTML = state.members.map(m => {
+    const extraInput = splitType !== 'equal' ? `
+      <input
+        type="number" min="0" step="${splitType === 'percentage' ? '1' : '0.5'}"
+        placeholder="${splitType === 'percentage' ? '0%' : '1'}"
+        class="split-val-input w-16 h-7 px-2 text-xs text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded text-right focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
+        data-member="${m.id}"
+      />
+    ` : '';
+    return `
+      <label class="split-with-item flex items-center gap-2.5 cursor-pointer group">
+        <input type="checkbox" value="${m.id}" class="split-member-check w-3.5 h-3.5 rounded border-(--color-hairline) accent-(--color-primary)" checked />
+        <span class="text-base">${m.emoji}</span>
+        <span class="flex-1 text-sm text-(--color-ink)">${escHtml(m.name)}</span>
+        ${extraInput}
+      </label>
+    `;
+  }).join('');
+}
+
+// ─── Render: expense list ────────────────────────────────────────────────────
+function renderExpenses() {
+  const list = document.getElementById('expense-list');
+  const empty = document.getElementById('expense-empty');
+  const countEl = document.getElementById('expense-count');
+  const totalEl = document.getElementById('expense-total-display');
+
+  const total = state.expenses.reduce((s, e) => s + e.amount, 0);
+  countEl.textContent = `${state.expenses.length} item${state.expenses.length !== 1 ? 's' : ''}`;
+  totalEl.textContent = state.expenses.length ? fmt(total) : '';
+
+  if (state.expenses.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.innerHTML = state.expenses.map(exp => {
+    const payer = getMemberName(exp.paidBy);
+    const icon = CATEGORY_ICONS[exp.category] || '📦';
+    const splitLabel = exp.splitWith?.length
+      ? exp.splitWith.map(s => getMemberName(s.memberId)).join(', ')
+      : '—';
+    return `
+      <div class="flex items-start gap-3 px-4 py-3 group hover:bg-(--color-canvas-soft) transition-colors">
+        <span class="text-lg mt-0.5">${icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-sm font-medium text-(--color-ink) truncate">${escHtml(exp.description || 'Expense')}</span>
+            <span class="text-sm font-mono font-medium text-(--color-ink) flex-shrink-0">${fmt(exp.amount)}</span>
+          </div>
+          <div class="text-xs text-(--color-mute) mt-0.5">
+            Paid by <span class="text-(--color-body)">${escHtml(payer)}</span>
+            · Split: <span class="text-(--color-body) capitalize">${exp.splitType}</span>
+            · <span class="text-(--color-body) truncate">${escHtml(splitLabel)}</span>
+          </div>
+        </div>
+        <button
+          onclick="removeExpense('${exp.id}')"
+          class="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center text-(--color-mute) hover:text-(--color-error) transition-all rounded flex-shrink-0 mt-0.5"
+          title="Remove"
+        >
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+// ─── Render: results ─────────────────────────────────────────────────────────
+function renderResults() {
+  const balances = computeBalances();
+  const settlements = computeSettlements({ ...balances });
+
+  // Settlement list
+  const settlList = document.getElementById('settlement-list');
+  const settlEmpty = document.getElementById('settlement-empty');
+  if (settlements.length === 0) {
+    settlList.innerHTML = '';
+    settlEmpty.style.display = '';
+  } else {
+    settlEmpty.style.display = 'none';
+    settlList.innerHTML = settlements.map(s => {
+      const fromMember = getMember(s.from);
+      const toMember = getMember(s.to);
+      return `
+        <div class="flex items-center gap-4 px-4 py-3.5">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <span class="text-lg">${fromMember?.emoji || '🧑'}</span>
+            <div class="min-w-0">
+              <span class="text-sm font-medium text-(--color-ink)">${escHtml(fromMember?.name || s.from)}</span>
+              <span class="text-xs text-(--color-mute) mx-1.5">${t('owes')}</span>
+              <span class="text-sm font-medium text-(--color-ink)">${escHtml(toMember?.name || s.to)}</span>
+            </div>
+          </div>
+          <span class="text-lg">${toMember?.emoji || '🧑'}</span>
+          <span class="font-mono text-sm font-semibold text-(--color-ink) ml-2 flex-shrink-0">${fmt(s.amount)}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Balance list
+  const balList = document.getElementById('balance-list');
+  const balEmpty = document.getElementById('balance-empty');
+  if (state.members.length === 0) {
+    balList.innerHTML = '';
+    balEmpty.style.display = '';
+    return;
+  }
+  balEmpty.style.display = 'none';
+
+  const totalPaid = state.expenses.reduce((s, e) => s + e.amount, 0);
+  balList.innerHTML = state.members.map(m => {
+    const bal = balances[m.id] || 0;
+    const paid = state.expenses.filter(e => e.paidBy === m.id).reduce((s, e) => s + e.amount, 0);
+    const isPositive = bal > 0.005;
+    const isNegative = bal < -0.005;
+
+    return `
+      <div class="flex items-center gap-3 px-4 py-3">
+        <span class="text-lg">${m.emoji}</span>
+        <div class="flex-1">
+          <div class="text-sm font-medium text-(--color-ink)">${escHtml(m.name)}</div>
+          <div class="text-xs text-(--color-mute)">Paid ${fmt(paid)}</div>
+        </div>
+        <div class="text-right">
+          <div class="text-sm font-mono font-medium ${isPositive ? 'text-green-600' : isNegative ? 'text-(--color-error)' : 'text-(--color-mute)'}">
+            ${isPositive ? '+' : ''}${fmt(bal)}
+          </div>
+          <div class="text-xs text-(--color-mute)">${isPositive ? 'gets back' : isNegative ? 'owes' : 'even'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ─── Render: all ─────────────────────────────────────────────────────────────
+function render() {
+  renderMembers();
+  renderExpenses();
+  renderResults();
+  updateI18n();
+  updateCurrencySymbols();
+}
+
+function updateI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+}
+
+function updateCurrencySymbols() {
+  const sym = state.currency.symbol;
+  document.querySelectorAll('#exp-currency-symbol, #tip-currency-symbol').forEach(el => {
+    el.textContent = sym;
+  });
+}
+
+// ─── Members CRUD ─────────────────────────────────────────────────────────────
+function addMember(name) {
+  name = name.trim();
+  if (!name) return;
+  const emoji = AVATARS[state.members.length % AVATARS.length];
+  state.members.push({ id: uid(), name, emoji });
+  saveState(); render();
+}
+
+window.removeMember = function(id) {
+  state.members = state.members.filter(m => m.id !== id);
+  state.expenses = state.expenses.map(exp => ({
+    ...exp,
+    splitWith: exp.splitWith?.filter(s => s.memberId !== id) || [],
+  }));
+  saveState(); render();
+};
+
+// ─── Expenses CRUD ────────────────────────────────────────────────────────────
+function addExpense() {
+  const desc = document.getElementById('exp-desc').value.trim();
+  const amountRaw = parseFloat(document.getElementById('exp-amount').value);
+  const paidBy = document.getElementById('exp-paid-by').value;
+  const category = document.getElementById('exp-category').value;
+  const splitType = document.querySelector('input[name="split-type"]:checked')?.value || 'equal';
+
+  if (!paidBy) { alert('Please select who paid.'); return; }
+  if (!amountRaw || amountRaw <= 0) { alert('Please enter a valid amount.'); return; }
+
+  const checkedMembers = [...document.querySelectorAll('.split-member-check:checked')]
+    .map(cb => cb.value);
+  if (checkedMembers.length === 0) { alert('Select at least one person to split with.'); return; }
+
+  const splitWith = checkedMembers.map(memberId => {
+    const valInput = document.querySelector(`.split-val-input[data-member="${memberId}"]`);
+    const value = valInput ? parseFloat(valInput.value) || (splitType === 'percentage' ? 0 : 1) : 1;
+    return { memberId, value };
+  });
+
+  if (splitType === 'percentage') {
+    const total = splitWith.reduce((s, sw) => s + sw.value, 0);
+    if (Math.abs(total - 100) > 0.5) {
+      alert(`Percentages must add up to 100%. Currently: ${total.toFixed(1)}%`);
+      return;
+    }
+  }
+
+  state.expenses.push({
+    id: uid(), description: desc || 'Expense', amount: amountRaw,
+    paidBy, category, splitType, splitWith,
+    date: new Date().toISOString(),
+  });
+
+  // Reset form
+  document.getElementById('exp-desc').value = '';
+  document.getElementById('exp-amount').value = '';
+
+  saveState(); render();
+}
+
+window.removeExpense = function(id) {
+  state.expenses = state.expenses.filter(e => e.id !== id);
+  saveState(); render();
+};
+
+// ─── Tip calculator ──────────────────────────────────────────────────────────
+function updateTipCalc() {
+  const subtotal = parseFloat(document.getElementById('tip-subtotal').value) || 0;
+  const pct = parseFloat(document.getElementById('tip-pct').value) || 0;
+  const tip = subtotal * pct / 100;
+  const total = subtotal + tip;
+  document.getElementById('tip-amount').textContent = subtotal ? fmt(tip) : '—';
+  document.getElementById('tip-total').textContent = subtotal ? fmt(total) : '—';
+}
+
+// ─── Share ────────────────────────────────────────────────────────────────────
+function shareLink() {
+  const url = location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('share-btn');
+      const span = btn.querySelector('span');
+      const orig = span.textContent;
+      span.textContent = t('copied');
+      setTimeout(() => { span.textContent = orig; }, 2000);
+    });
+  } else {
+    prompt('Copy this link:', url);
+  }
+}
+
+// ─── Copy results ─────────────────────────────────────────────────────────────
+function copyResults() {
+  const balances = computeBalances();
+  const settlements = computeSettlements({ ...balances });
+  const groupName = state.name || 'Bill Split';
+  let text = `${groupName} — Settlement\n\n`;
+  if (settlements.length === 0) {
+    text += t('settled');
+  } else {
+    settlements.forEach(s => {
+      text += `${getMemberName(s.from)} → ${getMemberName(s.to)}: ${fmt(s.amount)}\n`;
+    });
+  }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-results-btn');
+      const orig = btn.textContent;
+      btn.textContent = t('copied');
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  } else {
+    prompt('Copy this:', text);
+  }
+}
+
+// ─── Escape HTML ──────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+
+  // Populate currency select
+  const currSel = document.getElementById('currency-select');
+  CURRENCIES.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.code;
+    opt.textContent = `${c.symbol} ${c.code} — ${c.name}`;
+    if (c.code === state.currency.code) opt.selected = true;
+    currSel.appendChild(opt);
+  });
+
+  // Set language select
+  const langSel = document.getElementById('lang-select');
+  langSel.value = state.language;
+
+  // Set group name
+  document.getElementById('group-name').value = state.name;
+
+  render();
+
+  // ── Event listeners ──
+
+  document.getElementById('group-name').addEventListener('input', e => {
+    state.name = e.target.value;
+    saveState();
+  });
+
+  currSel.addEventListener('change', e => {
+    state.currency = CURRENCIES.find(c => c.code === e.target.value) || CURRENCIES[0];
+    saveState(); render(); updateTipCalc();
+  });
+
+  langSel.addEventListener('change', e => {
+    state.language = e.target.value;
+    saveState(); render();
+  });
+
+  // Tab switching
+  document.getElementById('tab-expenses').addEventListener('click', () => {
+    document.getElementById('panel-expenses').classList.remove('hidden');
+    document.getElementById('panel-results').classList.add('hidden');
+    document.getElementById('tab-expenses').classList.add('active');
+    document.getElementById('tab-results').classList.remove('active');
+  });
+
+  document.getElementById('tab-results').addEventListener('click', () => {
+    document.getElementById('panel-results').classList.remove('hidden');
+    document.getElementById('panel-expenses').classList.add('hidden');
+    document.getElementById('tab-results').classList.add('active');
+    document.getElementById('tab-expenses').classList.remove('active');
+    renderResults();
+  });
+
+  // Add member
+  document.getElementById('add-member-btn').addEventListener('click', () => {
+    const input = document.getElementById('new-member-input');
+    addMember(input.value);
+    input.value = '';
+    input.focus();
+  });
+  document.getElementById('new-member-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const input = e.target;
+      addMember(input.value);
+      input.value = '';
+    }
+  });
+
+  // Split type change
+  document.querySelectorAll('input[name="split-type"]').forEach(radio => {
+    radio.addEventListener('change', () => renderSplitWith());
+  });
+
+  // Toggle all members
+  document.getElementById('toggle-all-members').addEventListener('click', () => {
+    const checks = document.querySelectorAll('.split-member-check');
+    const allChecked = [...checks].every(c => c.checked);
+    checks.forEach(c => { c.checked = !allChecked; });
+  });
+
+  // Add expense
+  document.getElementById('add-expense-btn').addEventListener('click', addExpense);
+  document.getElementById('exp-amount').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addExpense();
+  });
+
+  // Tip calculator
+  document.getElementById('tip-subtotal').addEventListener('input', updateTipCalc);
+  document.getElementById('tip-pct').addEventListener('input', updateTipCalc);
+  document.querySelectorAll('.tip-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('tip-pct').value = btn.dataset.pct;
+      updateTipCalc();
+    });
+  });
+
+  // Add tip as expense
+  document.getElementById('add-tip-expense').addEventListener('click', () => {
+    const subtotal = parseFloat(document.getElementById('tip-subtotal').value) || 0;
+    const pct = parseFloat(document.getElementById('tip-pct').value) || 0;
+    const total = subtotal + subtotal * pct / 100;
+    if (total <= 0) return;
+    document.getElementById('exp-desc').value = `Dinner (incl. ${pct}% tip)`;
+    document.getElementById('exp-amount').value = total.toFixed(2);
+    // Switch to expenses tab
+    document.getElementById('tab-expenses').click();
+    document.getElementById('exp-desc').focus();
+  });
+
+  // Share & copy
+  document.getElementById('share-btn').addEventListener('click', shareLink);
+  document.getElementById('copy-results-btn').addEventListener('click', copyResults);
+
+  // Reset
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if (!confirm(t('resetConfirm'))) return;
+    localStorage.removeItem('bsc_state');
+    history.replaceState(null, '', '/app');
+    state = { id: uid(), name: '', currency: CURRENCIES[0], language: 'en', members: [], expenses: [] };
+    document.getElementById('group-name').value = '';
+    currSel.value = 'USD';
+    langSel.value = 'en';
+    render();
+  });
+});
+</script>

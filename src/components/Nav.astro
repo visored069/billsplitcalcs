@@ -1,0 +1,46 @@
+---
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = '/' } = Astro.props;
+---
+
+<header class="sticky top-0 z-50 bg-(--color-canvas)/95 backdrop-blur-sm border-b border-(--color-hairline)">
+  <nav class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2 font-semibold text-sm text-(--color-ink) tracking-tight">
+      <div class="w-6 h-6 rounded-md bg-(--color-primary) flex items-center justify-center flex-shrink-0">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 11L7 3L12 11H2Z" fill="white"/>
+        </svg>
+      </div>
+      BillSplit<span class="text-(--color-mute) font-normal">Calcs</span>
+    </a>
+
+    <!-- Center links -->
+    <div class="hidden md:flex items-center gap-1">
+      <a href="/" class={`text-sm px-3 py-2 rounded-full transition-colors duration-150 ${currentPath === '/' ? 'text-(--color-ink) bg-(--color-canvas-soft-2)' : 'text-(--color-body) hover:text-(--color-ink) hover:bg-(--color-canvas-soft-2)'}`}>
+        Home
+      </a>
+      <a href="/app" class={`text-sm px-3 py-2 rounded-full transition-colors duration-150 ${currentPath === '/app' ? 'text-(--color-ink) bg-(--color-canvas-soft-2)' : 'text-(--color-body) hover:text-(--color-ink) hover:bg-(--color-canvas-soft-2)'}`}>
+        Split Bills
+      </a>
+      <a href="/#features" class="text-sm px-3 py-2 rounded-full text-(--color-body) hover:text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors duration-150">
+        Features
+      </a>
+      <a href="/#how-it-works" class="text-sm px-3 py-2 rounded-full text-(--color-body) hover:text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors duration-150">
+        How it works
+      </a>
+    </div>
+
+    <!-- Right CTAs -->
+    <div class="flex items-center gap-2">
+      <a href="/app" class="hidden sm:inline-flex items-center h-7 px-3 text-sm font-medium text-(--color-ink) border border-(--color-hairline) rounded-md hover:bg-(--color-canvas-soft-2) transition-colors duration-150">
+        Try it free
+      </a>
+      <a href="/app" class="inline-flex items-center h-7 px-3 text-sm font-medium text-(--color-on-primary) bg-(--color-primary) rounded-md hover:opacity-90 transition-opacity duration-150">
+        Start Splitting
+      </a>
+    </div>
+  </nav>
+</header>
