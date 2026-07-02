@@ -228,6 +228,7 @@ import Footer from '../components/Footer.astro';
                 <div class="flex items-center gap-3">
                   <span id="expense-count" class="text-xs text-(--color-mute) font-mono">0 items</span>
                   <span id="expense-total-display" class="text-xs font-mono font-medium text-(--color-ink)"></span>
+                  <button id="clear-expenses-btn" class="text-xs text-(--color-mute) hover:text-(--color-error) transition-colors" data-i18n="clearExpenses">Clear</button>
                 </div>
               </div>
               <div id="expense-list" class="divide-y divide-(--color-hairline) min-h-[60px]">
@@ -319,6 +320,7 @@ const TRANSLATIONS = {
     share: 'Share', noExpenses: 'No expenses yet.',
     owes: 'owes', settled: 'All settled up!', addFirst: 'Add members first.',
     copied: 'Copied!', resetConfirm: 'Reset everything? This cannot be undone.',
+    clearExpenses: 'Clear', clearExpensesConfirm: 'Clear all expenses? Members and group name are kept.',
   },
   es: {
     members: 'Miembros', expenses: 'Gastos', results: 'Resultados',
@@ -328,6 +330,7 @@ const TRANSLATIONS = {
     share: 'Compartir', noExpenses: 'Sin gastos aún.',
     owes: 'debe', settled: '¡Todo liquidado!', addFirst: 'Agrega miembros primero.',
     copied: '¡Copiado!', resetConfirm: '¿Reiniciar todo? No se puede deshacer.',
+    clearExpenses: 'Borrar', clearExpensesConfirm: '¿Borrar todos los gastos? Los miembros y el nombre del grupo se conservan.',
   },
   fr: {
     members: 'Membres', expenses: 'Dépenses', results: 'Résultats',
@@ -337,6 +340,7 @@ const TRANSLATIONS = {
     share: 'Partager', noExpenses: 'Pas encore de dépenses.',
     owes: 'doit', settled: 'Tout est réglé!', addFirst: 'Ajoutez des membres d\'abord.',
     copied: 'Copié!', resetConfirm: 'Tout réinitialiser? Cela ne peut pas être annulé.',
+    clearExpenses: 'Effacer', clearExpensesConfirm: 'Effacer toutes les dépenses? Les membres et le nom du groupe sont conservés.',
   },
   de: {
     members: 'Mitglieder', expenses: 'Ausgaben', results: 'Ergebnisse',
@@ -346,6 +350,7 @@ const TRANSLATIONS = {
     share: 'Teilen', noExpenses: 'Noch keine Ausgaben.',
     owes: 'schuldet', settled: 'Alles ausgeglichen!', addFirst: 'Erst Mitglieder hinzufügen.',
     copied: 'Kopiert!', resetConfirm: 'Alles zurücksetzen? Dies kann nicht rückgängig gemacht werden.',
+    clearExpenses: 'Löschen', clearExpensesConfirm: 'Alle Ausgaben löschen? Mitglieder und Gruppenname bleiben erhalten.',
   },
   pt: {
     members: 'Membros', expenses: 'Despesas', results: 'Resultados',
@@ -355,6 +360,7 @@ const TRANSLATIONS = {
     share: 'Compartilhar', noExpenses: 'Sem despesas ainda.',
     owes: 'deve', settled: 'Tudo liquidado!', addFirst: 'Adicione membros primeiro.',
     copied: 'Copiado!', resetConfirm: 'Redefinir tudo? Isso não pode ser desfeito.',
+    clearExpenses: 'Limpar', clearExpensesConfirm: 'Limpar todas as despesas? Membros e nome do grupo são mantidos.',
   },
   ja: {
     members: 'メンバー', expenses: '支出', results: '結果',
@@ -364,6 +370,7 @@ const TRANSLATIONS = {
     share: '共有', noExpenses: '支出はまだありません。',
     owes: 'は', settled: '全員精算済み！', addFirst: '先にメンバーを追加してください。',
     copied: 'コピーしました！', resetConfirm: 'すべてリセットしますか？元に戻せません。',
+    clearExpenses: 'クリア', clearExpensesConfirm: 'すべての支出を削除しますか？メンバーとグループ名は保持されます。',
   },
   zh: {
     members: '成员', expenses: '费用', results: '结果',
@@ -373,6 +380,7 @@ const TRANSLATIONS = {
     share: '分享', noExpenses: '暂无费用。',
     owes: '欠', settled: '全部结清！', addFirst: '请先添加成员。',
     copied: '已复制！', resetConfirm: '重置所有内容？此操作无法撤销。',
+    clearExpenses: '清除', clearExpensesConfirm: '清除所有费用？成员和小组名称将被保留。',
   },
   hi: {
     members: 'सदस्य', expenses: 'खर्च', results: 'परिणाम',
@@ -382,6 +390,7 @@ const TRANSLATIONS = {
     share: 'साझा करें', noExpenses: 'अभी तक कोई खर्च नहीं।',
     owes: 'का', settled: 'सब बराबर!', addFirst: 'पहले सदस्य जोड़ें।',
     copied: 'कॉपी हो गया!', resetConfirm: 'सब कुछ रीसेट करें? यह पूर्ववत नहीं किया जा सकता।',
+    clearExpenses: 'साफ़ करें', clearExpensesConfirm: 'सभी खर्च साफ़ करें? सदस्य और समूह का नाम बना रहेगा।',
   },
   ar: {
     members: 'الأعضاء', expenses: 'المصاريف', results: 'النتائج',
@@ -391,6 +400,7 @@ const TRANSLATIONS = {
     share: 'مشاركة', noExpenses: 'لا مصاريف حتى الآن.',
     owes: 'مدين لـ', settled: 'الجميع متساوون!', addFirst: 'أضف أعضاء أولاً.',
     copied: 'تم النسخ!', resetConfirm: 'إعادة تعيين كل شيء؟ لا يمكن التراجع.',
+    clearExpenses: 'مسح', clearExpensesConfirm: 'مسح جميع المصاريف؟ سيتم الاحتفاظ بالأعضاء واسم المجموعة.',
   },
   ko: {
     members: '멤버', expenses: '지출', results: '결과',
@@ -400,6 +410,7 @@ const TRANSLATIONS = {
     share: '공유', noExpenses: '지출이 아직 없습니다.',
     owes: '에게', settled: '모두 정산 완료!', addFirst: '먼저 멤버를 추가하세요.',
     copied: '복사됨!', resetConfirm: '모든 것을 재설정하시겠습니까? 되돌릴 수 없습니다.',
+    clearExpenses: '지우기', clearExpensesConfirm: '모든 지출을 지우시겠습니까? 멤버와 그룹 이름은 유지됩니다.',
   },
   it: {
     members: 'Membri', expenses: 'Spese', results: 'Risultati',
@@ -409,6 +420,7 @@ const TRANSLATIONS = {
     share: 'Condividi', noExpenses: 'Nessuna spesa ancora.',
     owes: 'deve a', settled: 'Tutti in pari!', addFirst: 'Aggiungi prima i membri.',
     copied: 'Copiato!', resetConfirm: 'Resetta tutto? Non è possibile annullare.',
+    clearExpenses: 'Cancella', clearExpensesConfirm: 'Cancellare tutte le spese? Membri e nome del gruppo verranno mantenuti.',
   },
 };
 
@@ -1074,6 +1086,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Share & copy
   document.getElementById('share-btn').addEventListener('click', shareLink);
   document.getElementById('copy-results-btn').addEventListener('click', copyResults);
+
+  // Clear expenses (and therefore the results) without touching members/group name
+  document.getElementById('clear-expenses-btn').addEventListener('click', () => {
+    if (state.expenses.length === 0) return;
+    if (!confirm(t('clearExpensesConfirm'))) return;
+    state.expenses = [];
+    saveState(); render();
+  });
 
   // Reset
   document.getElementById('reset-btn').addEventListener('click', () => {
