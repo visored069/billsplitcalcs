@@ -4,6 +4,7 @@
   /* Colors from DESIGN.md */
   --color-primary: #171717;
   --color-on-primary: #ffffff;
+  --color-ink-fixed: #171717;
   --color-ink: #171717;
   --color-body: #4d4d4d;
   --color-mute: #888888;
@@ -68,6 +69,22 @@
   --space-section: 192px;
 }
 
+/* Dark theme overrides — toggled via .dark on <html> */
+.dark {
+  color-scheme: dark;
+  --color-primary: #ededed;
+  --color-on-primary: #0a0a0a;
+  --color-ink: #ededed;
+  --color-body: #a3a3a3;
+  --color-mute: #737373;
+  --color-hairline: #262626;
+  --color-hairline-strong: #404040;
+  --color-canvas: #0a0a0a;
+  --color-canvas-soft: #111111;
+  --color-canvas-soft-2: #1c1c1c;
+  --color-link-bg-soft: #16345e;
+}
+
 /* Base resets */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -79,6 +96,7 @@ html {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 150ms ease;
 }
 
 ::selection {
