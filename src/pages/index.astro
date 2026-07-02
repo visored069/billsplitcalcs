@@ -10,9 +10,10 @@ import Footer from '../components/Footer.astro';
   <!-- Hero -->
   <section class="relative overflow-hidden bg-(--color-canvas) pt-20 pb-32">
     <!-- Mesh gradient backdrop -->
-    <div class="absolute inset-0 opacity-15 pointer-events-none" aria-hidden="true">
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 60% at 20% 40%, #007cf0 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 20%, #7928ca 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 60% 80%, #ff0080 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 40% 60%, #50e3c2 0%, transparent 50%);"></div>
+    <div class="absolute inset-0 opacity-60 pointer-events-none blur-3xl" aria-hidden="true">
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 60% at 20% 30%, #007cf0 0%, transparent 60%), radial-gradient(ellipse 65% 55% at 82% 15%, #7928ca 0%, transparent 55%), radial-gradient(ellipse 75% 55% at 65% 75%, #ff0080 0%, transparent 55%), radial-gradient(ellipse 55% 45% at 30% 65%, #50e3c2 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 90% 70%, #f9cb28 0%, transparent 50%);"></div>
     </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-(--color-canvas) pointer-events-none" aria-hidden="true"></div>
 
     <div class="relative max-w-[1400px] mx-auto px-6 text-center">
       <!-- Badge -->
@@ -176,8 +177,11 @@ import Footer from '../components/Footer.astro';
   </section>
 
   <!-- Split type spotlight -->
-  <section class="bg-(--color-canvas-soft) py-24">
-    <div class="max-w-[1400px] mx-auto px-6">
+  <section class="relative overflow-hidden bg-(--color-canvas-soft) py-24">
+    <div class="absolute inset-0 opacity-20 pointer-events-none blur-3xl" aria-hidden="true">
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse 55% 60% at 85% 20%, #7928ca 0%, transparent 60%), radial-gradient(ellipse 50% 55% at 95% 80%, #ff0080 0%, transparent 55%);"></div>
+    </div>
+    <div class="relative max-w-[1400px] mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Split types</div>
