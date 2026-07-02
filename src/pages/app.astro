@@ -30,6 +30,14 @@ import Footer from '../components/Footer.astro';
             <option value="ar">العربية</option>
             <option value="ko">한국어</option>
             <option value="it">Italiano</option>
+            <option value="tr">Türkçe</option>
+            <option value="ta">தமிழ்</option>
+            <option value="te">తెలుగు</option>
+            <option value="mr">मराठी</option>
+            <option value="pcm">Naijá</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="ur">اردو</option>
+            <option value="bn">বাংলা</option>
           </select>
 
           <!-- Currency selector -->
@@ -421,6 +429,86 @@ const TRANSLATIONS = {
     owes: 'deve a', settled: 'Tutti in pari!', addFirst: 'Aggiungi prima i membri.',
     copied: 'Copiato!', resetConfirm: 'Resetta tutto? Non è possibile annullare.',
     clearExpenses: 'Cancella', clearExpensesConfirm: 'Cancellare tutte le spese? Membri e nome del gruppo verranno mantenuti.',
+  },
+  tr: {
+    members: 'Üyeler', expenses: 'Harcamalar', results: 'Sonuçlar',
+    addExpense: 'Harcama Ekle', description: 'Açıklama', amount: 'Tutar',
+    paidBy: 'Ödeyen', splitType: 'Bölüşüm türü', splitWith: 'Şununla paylaş',
+    allExpenses: 'Tüm Harcamalar', settlement: 'Hesaplaşma', balances: 'Bakiyeler',
+    share: 'Paylaş', noExpenses: 'Henüz harcama yok.',
+    owes: 'borçlu', settled: 'Herkes ödeşti!', addFirst: 'Önce üye ekleyin.',
+    copied: 'Kopyalandı!', resetConfirm: 'Her şeyi sıfırla? Bu geri alınamaz.',
+    clearExpenses: 'Temizle', clearExpensesConfirm: 'Tüm harcamalar temizlensin mi? Üyeler ve grup adı korunur.',
+  },
+  ta: {
+    members: 'உறுப்பினர்கள்', expenses: 'செலவுகள்', results: 'முடிவுகள்',
+    addExpense: 'செலவு சேர்', description: 'விவரம்', amount: 'தொகை',
+    paidBy: 'செலுத்தியவர்', splitType: 'பிரிவு வகை', splitWith: 'இவர்களுடன் பிரிக்க',
+    allExpenses: 'அனைத்து செலவுகள்', settlement: 'தீர்வு', balances: 'இருப்புகள்',
+    share: 'பகிர்', noExpenses: 'இன்னும் செலவுகள் இல்லை.',
+    owes: 'கொடுக்க வேண்டும்', settled: 'அனைவரும் சரி!', addFirst: 'முதலில் உறுப்பினர்களைச் சேர்க்கவும்.',
+    copied: 'நகலெடுக்கப்பட்டது!', resetConfirm: 'அனைத்தையும் மீட்டமைக்கவா? இதை மாற்ற முடியாது.',
+    clearExpenses: 'அழி', clearExpensesConfirm: 'அனைத்து செலவுகளையும் அழிக்கவா? உறுப்பினர்கள் மற்றும் குழு பெயர் பாதுகாக்கப்படும்.',
+  },
+  te: {
+    members: 'సభ్యులు', expenses: 'ఖర్చులు', results: 'ఫలితాలు',
+    addExpense: 'ఖర్చు జోడించండి', description: 'వివరణ', amount: 'మొత్తం',
+    paidBy: 'చెల్లించినవారు', splitType: 'విభజన రకం', splitWith: 'వీరితో పంచుకోండి',
+    allExpenses: 'అన్ని ఖర్చులు', settlement: 'పరిష్కారం', balances: 'బ్యాలెన్స్‌లు',
+    share: 'పంచుకోండి', noExpenses: 'ఇంకా ఖర్చులు లేవు.',
+    owes: 'బాకీ', settled: 'అందరూ సెటిల్ అయ్యారు!', addFirst: 'ముందు సభ్యులను జోడించండి.',
+    copied: 'కాపీ చేయబడింది!', resetConfirm: 'అన్నింటినీ రీసెట్ చేయాలా? దీన్ని రద్దు చేయలేరు.',
+    clearExpenses: 'క్లియర్', clearExpensesConfirm: 'అన్ని ఖర్చులను క్లియర్ చేయాలా? సభ్యులు మరియు గ్రూప్ పేరు అలాగే ఉంటాయి.',
+  },
+  mr: {
+    members: 'सदस्य', expenses: 'खर्च', results: 'निकाल',
+    addExpense: 'खर्च जोडा', description: 'वर्णन', amount: 'रक्कम',
+    paidBy: 'कोणी दिले', splitType: 'विभागणी प्रकार', splitWith: 'यांच्यासोबत विभागा',
+    allExpenses: 'सर्व खर्च', settlement: 'सेटलमेंट', balances: 'शिल्लक',
+    share: 'शेअर करा', noExpenses: 'अजून खर्च नाहीत.',
+    owes: 'देणे आहे', settled: 'सर्व सेटल झाले!', addFirst: 'आधी सदस्य जोडा.',
+    copied: 'कॉपी केले!', resetConfirm: 'सर्वकाही रीसेट करायचे? हे पूर्ववत करता येणार नाही.',
+    clearExpenses: 'साफ करा', clearExpensesConfirm: 'सर्व खर्च साफ करायचे? सदस्य आणि गटाचे नाव कायम राहील.',
+  },
+  pcm: {
+    members: 'Members', expenses: 'Wetin Dem Spend', results: 'Results',
+    addExpense: 'Add Expense', description: 'Wetin e be', amount: 'Amount',
+    paidBy: 'Who pay', splitType: 'How to share am', splitWith: 'Share with',
+    allExpenses: 'All Wetin Dem Spend', settlement: 'Settlement', balances: 'Balance',
+    share: 'Share', noExpenses: 'No expense yet.',
+    owes: 'owe', settled: 'Everybody don balance!', addFirst: 'Add members first.',
+    copied: 'E don copy!', resetConfirm: 'You wan reset everything? E no fit undo.',
+    clearExpenses: 'Clear', clearExpensesConfirm: 'Clear all expenses? Members and group name go stay.',
+  },
+  id: {
+    members: 'Anggota', expenses: 'Pengeluaran', results: 'Hasil',
+    addExpense: 'Tambah Pengeluaran', description: 'Deskripsi', amount: 'Jumlah',
+    paidBy: 'Dibayar oleh', splitType: 'Jenis pembagian', splitWith: 'Bagi dengan',
+    allExpenses: 'Semua Pengeluaran', settlement: 'Penyelesaian', balances: 'Saldo',
+    share: 'Bagikan', noExpenses: 'Belum ada pengeluaran.',
+    owes: 'berutang kepada', settled: 'Semua sudah lunas!', addFirst: 'Tambahkan anggota dulu.',
+    copied: 'Disalin!', resetConfirm: 'Reset semua? Ini tidak bisa dibatalkan.',
+    clearExpenses: 'Hapus', clearExpensesConfirm: 'Hapus semua pengeluaran? Anggota dan nama grup tetap disimpan.',
+  },
+  ur: {
+    members: 'اراکین', expenses: 'اخراجات', results: 'نتائج',
+    addExpense: 'خرچ شامل کریں', description: 'تفصیل', amount: 'رقم',
+    paidBy: 'ادا کنندہ', splitType: 'تقسیم کی قسم', splitWith: 'ان کے ساتھ تقسیم کریں',
+    allExpenses: 'تمام اخراجات', settlement: 'تصفیہ', balances: 'بیلنس',
+    share: 'شیئر کریں', noExpenses: 'ابھی تک کوئی خرچ نہیں۔',
+    owes: 'کا مقروض ہے', settled: 'سب برابر ہیں!', addFirst: 'پہلے اراکین شامل کریں۔',
+    copied: 'کاپی ہو گیا!', resetConfirm: 'سب کچھ ری سیٹ کریں؟ اسے واپس نہیں کیا جا سکتا۔',
+    clearExpenses: 'صاف کریں', clearExpensesConfirm: 'تمام اخراجات صاف کریں؟ اراکین اور گروپ کا نام محفوظ رہیں گے۔',
+  },
+  bn: {
+    members: 'সদস্য', expenses: 'খরচ', results: 'ফলাফল',
+    addExpense: 'খরচ যোগ করুন', description: 'বিবরণ', amount: 'পরিমাণ',
+    paidBy: 'প্রদানকারী', splitType: 'ভাগের ধরন', splitWith: 'যাদের সাথে ভাগ করবেন',
+    allExpenses: 'সমস্ত খরচ', settlement: 'নিষ্পত্তি', balances: 'ব্যালেন্স',
+    share: 'শেয়ার করুন', noExpenses: 'এখনও কোনো খরচ নেই।',
+    owes: 'পাওনা', settled: 'সবাই মিটে গেছে!', addFirst: 'প্রথমে সদস্য যোগ করুন।',
+    copied: 'কপি হয়েছে!', resetConfirm: 'সব কিছু রিসেট করবেন? এটি ফিরিয়ে আনা যাবে না।',
+    clearExpenses: 'মুছুন', clearExpensesConfirm: 'সমস্ত খরচ মুছবেন? সদস্য এবং গ্রুপের নাম রাখা হবে।',
   },
 };
 
