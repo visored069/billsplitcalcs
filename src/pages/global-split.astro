@@ -1,0 +1,947 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Global Split — BillSplit Calcs" description="Log group expenses from anywhere, on any date, then reconcile everyone's spending together at month's end.">
+  <Nav currentPath="/global-split" />
+
+  <main class="min-h-screen bg-(--color-canvas-soft) py-8 px-4">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Header row -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 no-print">
+        <div>
+          <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-1">Global Split</div>
+          <h1 class="text-2xl font-semibold text-(--color-ink) tracking-tight">Group Expense Ledger</h1>
+          <p class="text-sm text-(--color-body) mt-0.5">Everyone logs their own spending, whenever, wherever. Reconcile as a group at month's end.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Currency selector -->
+          <select id="gs-currency-select" class="custom-select h-8 pl-3 pr-8 text-xs text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-md appearance-none cursor-pointer hover:border-(--color-hairline-strong) transition-colors focus:outline-none focus:ring-1 focus:ring-(--color-primary)">
+          </select>
+
+          <!-- Share / sync dropdown -->
+          <div class="relative">
+            <button id="gs-share-btn" class="h-8 px-3 text-xs font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-md hover:bg-(--color-canvas-soft-2) transition-colors flex items-center gap-1.5">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 1.5L10.5 3 9 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 3H4.5C3.119 3 2 4.119 2 5.5V5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <span>Sync</span>
+            </button>
+
+            <div id="gs-share-menu" class="hidden absolute right-0 top-9 z-20 w-56 bg-(--color-canvas) border border-(--color-hairline) rounded-lg shadow-l4 overflow-hidden">
+              <button id="gs-copy-link" class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors text-left">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.3"/></svg>
+                Copy share link
+              </button>
+              <button id="gs-share-whatsapp" class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors text-left">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.6 2.4A7.5 7.5 0 002 11.8L1 15l3.3-1a7.5 7.5 0 009.3-11.6z" stroke="#25D366" stroke-width="1.3"/></svg>
+                Share via WhatsApp
+              </button>
+              <div class="border-t border-(--color-hairline)"></div>
+              <button id="gs-export-file" class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors text-left">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0l-3-3m3 3l3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 11v1.5A1.5 1.5 0 004 14h8a1.5 1.5 0 001.5-1.5V11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Export .json file
+              </button>
+              <button id="gs-import-file" class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors text-left">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 10V2m0 0L5 5m3-3l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 11v1.5A1.5 1.5 0 004 14h8a1.5 1.5 0 001.5-1.5V11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Import / merge file...
+              </button>
+              <input type="file" id="gs-file-input" accept="application/json" class="hidden" />
+            </div>
+          </div>
+
+          <button id="gs-print-btn" class="h-8 px-3 text-xs font-medium text-(--color-on-primary) bg-(--color-primary) rounded-md hover:opacity-90 transition-opacity flex items-center gap-1.5">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2" y="4" width="8" height="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 4V2h6v2M3 7v3h6V7" stroke="currentColor" stroke-width="1.2"/></svg>
+            Monthly statement
+          </button>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="mb-6 bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l1 px-4 py-3 text-xs text-(--color-body) leading-relaxed no-print">
+        <strong class="text-(--color-ink)">How Global Split works:</strong> there's no account or server — each person adds their own expenses on their own device. Use <strong>Sync → Copy share link</strong> (or export a file) and send it to the group; whoever opens the link or imports the file gets everyone's entries merged in. Re-share whenever new expenses are added, then generate the <strong>Monthly statement</strong> together at month's end.
+      </div>
+
+      <!-- Group name -->
+      <div class="mb-6 no-print">
+        <input
+          id="gs-group-name"
+          type="text"
+          placeholder="Group name (e.g. Sharma Family — Household)"
+          class="w-full h-10 px-3 text-sm text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 no-print">
+
+        <!-- LEFT: Members panel -->
+        <div class="lg:col-span-1">
+          <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
+              <h2 class="text-sm font-medium text-(--color-ink)">Members</h2>
+              <span id="gs-member-count" class="inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 text-xs text-(--color-on-primary) bg-(--color-primary) font-mono rounded-md">0</span>
+            </div>
+
+            <div id="gs-member-list" class="divide-y divide-(--color-hairline) min-h-[80px]">
+              <!-- JS rendered -->
+            </div>
+
+            <div class="px-4 py-3 border-t border-(--color-hairline)">
+              <div class="flex gap-2">
+                <input
+                  id="gs-new-member-input"
+                  type="text"
+                  placeholder="Name..."
+                  maxlength="30"
+                  class="flex-1 h-8 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors"
+                />
+                <button
+                  id="gs-add-member-btn"
+                  class="h-8 px-3 text-xs font-medium text-(--color-on-primary) bg-(--color-primary) rounded-md hover:opacity-90 transition-opacity"
+                >
+                  Add
+                </button>
+              </div>
+              <p class="text-[11px] text-(--color-mute) mt-2">Tip: use the same spelling of your name on every device — that's how entries get matched together when you sync.</p>
+            </div>
+          </div>
+
+          <!-- Month + totals summary -->
+          <div class="mt-4 bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between gap-2">
+              <h2 class="text-sm font-medium text-(--color-ink)">Viewing</h2>
+              <select id="gs-month-select" class="custom-select h-7 pl-2.5 pr-7 text-xs text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-(--color-primary)"></select>
+            </div>
+            <div class="px-4 py-4 space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-(--color-body)">Entries this period</span>
+                <span id="gs-month-count" class="font-mono text-(--color-ink)">0</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-(--color-body)">Total spent</span>
+                <span id="gs-month-total" class="font-mono font-medium text-(--color-ink)">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Add expense + log + summary -->
+        <div class="lg:col-span-2 space-y-4">
+
+          <!-- Add expense form -->
+          <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline)">
+              <h2 class="text-sm font-medium text-(--color-ink)">Log an expense</h2>
+            </div>
+            <div class="px-4 py-4 space-y-3">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Date</label>
+                  <input id="ge-date" type="date" class="w-full h-9 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                </div>
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Place</label>
+                  <input id="ge-place" type="text" placeholder="e.g. Mumbai" class="w-full h-9 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Description</label>
+                  <input id="ge-desc" type="text" placeholder="e.g. Groceries" class="w-full h-9 px-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md placeholder:text-(--color-mute) focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                </div>
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Amount</label>
+                  <div class="relative">
+                    <span id="ge-currency-symbol" class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-(--color-mute)">$</span>
+                    <input id="ge-amount" type="number" min="0" step="0.01" placeholder="0.00" class="w-full h-9 pl-7 pr-3 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Spent by</label>
+                  <select id="ge-member" class="custom-select w-full h-9 pl-3 pr-8 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-(--color-primary) focus:border-(--color-primary) transition-colors">
+                    <option value="">Select person...</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide block mb-1">Category</label>
+                  <select id="ge-category" class="custom-select w-full h-9 pl-3 pr-8 text-sm text-(--color-ink) bg-(--color-canvas-soft) border border-(--color-hairline) rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-(--color-primary) transition-colors">
+                    <option value="general">General</option>
+                    <option value="food">Food & Drink</option>
+                    <option value="transport">Transport</option>
+                    <option value="accommodation">Accommodation</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Split with (optional) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide">Split this expense with (optional)</label>
+                  <label class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-(--color-hairline) cursor-pointer hover:border-(--color-hairline-strong) transition-colors">
+                    <input type="checkbox" id="ge-toggle-all" class="w-3.5 h-3.5 rounded border-(--color-hairline) accent-(--color-primary)" />
+                    <span class="text-xs font-medium text-(--color-ink)">All</span>
+                  </label>
+                </div>
+                <div id="ge-split-list" class="flex flex-wrap gap-1.5">
+                  <!-- JS rendered -->
+                </div>
+                <div id="ge-split-empty" class="text-xs text-(--color-mute) py-1">Add members first.</div>
+                <p class="text-[11px] text-(--color-mute) mt-1.5">Leave everyone unchecked to just log your own spending — no split, no settlement.</p>
+              </div>
+
+              <button id="ge-add-btn" class="w-full h-9 text-sm font-medium text-(--color-on-primary) bg-(--color-primary) rounded-md hover:opacity-90 transition-opacity">
+                Add to ledger
+              </button>
+            </div>
+          </div>
+
+          <!-- Entry log -->
+          <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline) flex items-center justify-between">
+              <h2 class="text-sm font-medium text-(--color-ink)">Ledger</h2>
+              <div class="flex items-center gap-3">
+                <span id="gs-entry-count" class="text-xs text-(--color-mute) font-mono">0 items</span>
+                <span id="gs-entry-total" class="text-xs font-mono font-medium text-(--color-ink)"></span>
+              </div>
+            </div>
+            <div id="gs-entry-list" class="divide-y divide-(--color-hairline) min-h-[60px]">
+              <!-- JS rendered -->
+            </div>
+            <div id="gs-entry-empty" class="px-4 py-8 text-center">
+              <div class="text-sm text-(--color-mute)">No expenses logged for this period.</div>
+              <div class="text-xs text-(--color-mute) mt-1">Add one above, or sync to pull in the group's entries.</div>
+            </div>
+          </div>
+
+          <!-- Balances (only entries that opted into a split) -->
+          <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 overflow-hidden">
+            <div class="px-4 py-3 border-b border-(--color-hairline)">
+              <h2 class="text-sm font-medium text-(--color-ink)">Settlement (shared expenses only)</h2>
+            </div>
+            <div id="gs-settlement-list" class="divide-y divide-(--color-hairline)">
+              <!-- JS rendered -->
+            </div>
+            <div id="gs-settlement-empty" class="px-4 py-8 text-center">
+              <div class="text-sm text-(--color-mute)">Nothing to settle this period.</div>
+              <div class="text-xs text-(--color-mute) mt-1">Mark an expense to split it with others to see settlements here.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Reset -->
+      <div class="mt-6 text-center no-print">
+        <button id="gs-reset-btn" class="text-xs text-(--color-mute) hover:text-(--color-error) transition-colors underline underline-offset-2">
+          Reset & start over
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Printable monthly statement (hidden on screen, shown only when printing) -->
+  <div id="gs-printable-area"></div>
+
+  <div id="gs-toast" class="hidden fixed bottom-4 right-4 z-50 bg-(--color-ink) text-(--color-canvas) text-xs font-medium px-3.5 py-2.5 rounded-md shadow-l4 no-print"></div>
+
+  <Footer />
+</Layout>
+
+<style>
+  :global(.custom-select) {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+
+  .gs-split-chip input:checked + span {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+  }
+
+  #gs-printable-area {
+    display: none;
+  }
+
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #gs-printable-area, #gs-printable-area * {
+      visibility: visible;
+    }
+    #gs-printable-area {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 24px;
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #111;
+    }
+    #gs-printable-area h1 { font-size: 20px; margin: 0 0 2px; }
+    #gs-printable-area h2 { font-size: 14px; font-weight: normal; margin: 0 0 2px; color: #444; }
+    #gs-printable-area .gs-meta { font-size: 11px; color: #666; margin-bottom: 16px; }
+    #gs-printable-area table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12px; }
+    #gs-printable-area th, #gs-printable-area td { text-align: left; padding: 5px 8px; border-bottom: 1px solid #ddd; }
+    #gs-printable-area th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: #666; }
+    #gs-printable-area h3 { font-size: 13px; margin: 18px 0 6px; }
+    #gs-printable-area ul { margin: 0; padding-left: 18px; font-size: 12px; }
+    #gs-printable-area .gs-total-row td { font-weight: bold; border-top: 2px solid #111; border-bottom: none; }
+  }
+</style>
+
+<script>
+// ─── Currency list ────────────────────────────────────────────────────────────
+const CURRENCIES = [
+  { code: 'USD', symbol: '$', name: 'US Dollar' },
+  { code: 'EUR', symbol: '€', name: 'Euro' },
+  { code: 'GBP', symbol: '£', name: 'British Pound' },
+  { code: 'JPY', symbol: '¥', name: 'Japanese Yen' },
+  { code: 'INR', symbol: '₹', name: 'Indian Rupee' },
+  { code: 'CNY', symbol: '¥', name: 'Chinese Yuan' },
+  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar' },
+  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar' },
+  { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar' },
+  { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham' },
+  { code: 'ZAR', symbol: 'R', name: 'South African Rand' },
+  { code: 'NGN', symbol: '₦', name: 'Nigerian Naira' },
+  { code: 'BRL', symbol: 'R$', name: 'Brazilian Real' },
+  { code: 'MXN', symbol: 'MX$', name: 'Mexican Peso' },
+  { code: 'PKR', symbol: '₨', name: 'Pakistani Rupee' },
+  { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka' },
+  { code: 'PHP', symbol: '₱', name: 'Philippine Peso' },
+  { code: 'IDR', symbol: 'Rp', name: 'Indonesian Rupiah' },
+];
+
+const CATEGORY_ICONS = {
+  general: '📦', food: '🍽️', transport: '🚗',
+  accommodation: '🏠', entertainment: '🎭', shopping: '🛍️', other: '📌',
+};
+
+const AVATARS = ['😀','🙂','😎','🤓','🤩','😄','🧑','👩','👨','🦊','🐼','🐙','🦁','🐸','🐧'];
+
+const uid = () => Math.random().toString(36).slice(2, 9);
+const todayStr = () => new Date().toISOString().slice(0, 10);
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let state = {
+  id: uid(),
+  groupName: '',
+  currency: CURRENCIES[0],
+  members: [],
+  entries: [], // { id, memberId, date, place, description, category, amount, splitWith: [memberId,...], addedAt }
+};
+
+const STORAGE_KEY = 'gs_state';
+
+// ─── Persistence ─────────────────────────────────────────────────────────────
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+}
+
+// btoa/atob are Latin1-only; member names/emoji are UTF-8, so encode via bytes.
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  bytes.forEach(b => { binary += String.fromCharCode(b); });
+  return btoa(binary);
+}
+
+function base64ToUtf8(b64) {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function mergeState(incoming) {
+  if (!incoming || !Array.isArray(incoming.members) || !Array.isArray(incoming.entries)) return 0;
+
+  const nameToId = new Map(state.members.map(m => [m.name.trim().toLowerCase(), m.id]));
+  const idRemap = new Map();
+
+  incoming.members.forEach(m => {
+    const key = (m.name || '').trim().toLowerCase();
+    if (!key) return;
+    if (nameToId.has(key)) {
+      idRemap.set(m.id, nameToId.get(key));
+    } else {
+      let newId = m.id || uid();
+      while (state.members.some(sm => sm.id === newId)) newId = uid();
+      state.members.push({ id: newId, name: m.name.trim(), emoji: m.emoji || AVATARS[state.members.length % AVATARS.length] });
+      idRemap.set(m.id, newId);
+      nameToId.set(key, newId);
+    }
+  });
+
+  const existingIds = new Set(state.entries.map(e => e.id));
+  let added = 0;
+  incoming.entries.forEach(e => {
+    if (!e || !e.id || existingIds.has(e.id)) return;
+    state.entries.push({
+      id: e.id,
+      memberId: idRemap.get(e.memberId) || e.memberId,
+      date: e.date || todayStr(),
+      place: e.place || '',
+      description: e.description || 'Expense',
+      category: e.category || 'general',
+      amount: Number(e.amount) || 0,
+      splitWith: (e.splitWith || []).map(id => idRemap.get(id) || id),
+      addedAt: e.addedAt || new Date().toISOString(),
+    });
+    added++;
+  });
+
+  if (!state.groupName && incoming.groupName) state.groupName = incoming.groupName;
+  return added;
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) state = JSON.parse(saved);
+  } catch (_) {}
+
+  try {
+    const hash = location.hash.slice(1);
+    if (hash) {
+      const incoming = JSON.parse(base64ToUtf8(hash));
+      const added = mergeState(incoming);
+      saveState();
+      history.replaceState(null, '', location.pathname);
+      if (added > 0) showToast(`Synced — merged ${added} new expense${added !== 1 ? 's' : ''} from the shared link.`);
+    }
+  } catch (_) {}
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('gs-toast');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 3500);
+}
+
+// ─── Balances / settlement (only entries with a non-empty splitWith) ────────
+function computeBalances(entries) {
+  const balances = {};
+  state.members.forEach(m => { balances[m.id] = 0; });
+  entries.forEach(e => {
+    if (!e.splitWith || e.splitWith.length === 0) return;
+    const share = e.amount / e.splitWith.length;
+    e.splitWith.forEach(id => { if (balances[id] !== undefined) balances[id] -= share; });
+    if (balances[e.memberId] !== undefined) balances[e.memberId] += e.amount;
+  });
+  return balances;
+}
+
+function computeSettlements(balances) {
+  const eps = 0.005;
+  const creditors = [];
+  const debtors = [];
+  Object.entries(balances).forEach(([id, bal]) => {
+    if (bal > eps) creditors.push({ id, amount: bal });
+    else if (bal < -eps) debtors.push({ id, amount: -bal });
+  });
+  creditors.sort((a, b) => b.amount - a.amount);
+  debtors.sort((a, b) => b.amount - a.amount);
+
+  const settlements = [];
+  let ci = 0, di = 0;
+  while (ci < creditors.length && di < debtors.length) {
+    const cred = creditors[ci];
+    const debt = debtors[di];
+    const transfer = Math.min(cred.amount, debt.amount);
+    settlements.push({ from: debt.id, to: cred.id, amount: transfer });
+    cred.amount -= transfer;
+    debt.amount -= transfer;
+    if (cred.amount < eps) ci++;
+    if (debt.amount < eps) di++;
+  }
+  return settlements;
+}
+
+// ─── Format helpers ───────────────────────────────────────────────────────────
+function fmt(amount) {
+  const code = state.currency.code;
+  try {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency', currency: code, minimumFractionDigits: 2, maximumFractionDigits: 2,
+    }).format(amount);
+  } catch (_) {
+    return `${state.currency.symbol}${amount.toFixed(2)}`;
+  }
+}
+
+function formatDate(dateStr) {
+  try {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  } catch (_) { return dateStr; }
+}
+
+function monthLabel(key) {
+  if (key === 'all') return 'All time';
+  const [y, m] = key.split('-').map(Number);
+  return new Date(y, m - 1, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function getMember(id) { return state.members.find(m => m.id === id); }
+function getMemberName(id) { return getMember(id)?.name || 'Unknown member'; }
+
+function filteredEntries(monthKey) {
+  const entries = monthKey === 'all' ? state.entries : state.entries.filter(e => e.date.slice(0, 7) === monthKey);
+  return entries.slice().sort((a, b) => a.date.localeCompare(b.date) || a.addedAt.localeCompare(b.addedAt));
+}
+
+function currentMonthKey() {
+  const sel = document.getElementById('gs-month-select');
+  return sel.value || todayStr().slice(0, 7);
+}
+
+// ─── Render: members ─────────────────────────────────────────────────────────
+function renderMembers() {
+  const list = document.getElementById('gs-member-list');
+  document.getElementById('gs-member-count').textContent = String(state.members.length);
+
+  list.innerHTML = state.members.map(m => `
+    <div class="flex items-center gap-3 px-4 py-2.5 group hover:bg-(--color-canvas-soft) transition-colors">
+      <span class="text-lg leading-none">${m.emoji}</span>
+      <span class="flex-1 text-sm text-(--color-ink)">${escHtml(m.name)}</span>
+      <button
+        onclick="gsRemoveMember('${m.id}')"
+        class="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center text-(--color-mute) hover:text-(--color-error) transition-all rounded"
+        title="Remove"
+      >
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  `).join('');
+
+  renderMemberSelect();
+  renderSplitWith();
+}
+
+function renderMemberSelect() {
+  const sel = document.getElementById('ge-member');
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">Select person...</option>` +
+    state.members.map(m => `<option value="${m.id}" ${m.id === cur ? 'selected' : ''}>${escHtml(m.name)}</option>`).join('');
+}
+
+function renderSplitWith() {
+  const container = document.getElementById('ge-split-list');
+  const empty = document.getElementById('ge-split-empty');
+
+  if (state.members.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  container.innerHTML = state.members.map(m => `
+    <label class="gs-split-chip cursor-pointer">
+      <input type="checkbox" value="${m.id}" class="ge-split-check sr-only" />
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs border border-(--color-hairline) rounded-full transition-colors hover:border-(--color-hairline-strong)">
+        ${m.emoji} ${escHtml(m.name)}
+      </span>
+    </label>
+  `).join('');
+}
+
+// ─── Render: month select ─────────────────────────────────────────────────────
+function renderMonthSelect() {
+  const sel = document.getElementById('gs-month-select');
+  const cur = sel.value || todayStr().slice(0, 7);
+  const months = new Set(state.entries.map(e => e.date.slice(0, 7)));
+  months.add(todayStr().slice(0, 7));
+  const sorted = [...months].sort().reverse();
+  sel.innerHTML = sorted.map(m => `<option value="${m}">${monthLabel(m)}</option>`).join('') +
+    `<option value="all">All time</option>`;
+  sel.value = [...sel.options].some(o => o.value === cur) ? cur : sorted[0];
+}
+
+// ─── Render: entry log ────────────────────────────────────────────────────────
+function renderEntries() {
+  const monthKey = currentMonthKey();
+  const entries = filteredEntries(monthKey);
+  const list = document.getElementById('gs-entry-list');
+  const empty = document.getElementById('gs-entry-empty');
+  const countEl = document.getElementById('gs-entry-count');
+  const totalEl = document.getElementById('gs-entry-total');
+  const monthCountEl = document.getElementById('gs-month-count');
+  const monthTotalEl = document.getElementById('gs-month-total');
+
+  const total = entries.reduce((s, e) => s + e.amount, 0);
+  countEl.textContent = `${entries.length} item${entries.length !== 1 ? 's' : ''}`;
+  totalEl.textContent = entries.length ? fmt(total) : '';
+  monthCountEl.textContent = String(entries.length);
+  monthTotalEl.textContent = entries.length ? fmt(total) : '—';
+
+  if (entries.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const groups = [];
+  let lastDate = null;
+  entries.forEach(e => {
+    if (e.date !== lastDate) { groups.push({ date: e.date, items: [] }); lastDate = e.date; }
+    groups[groups.length - 1].items.push(e);
+  });
+
+  list.innerHTML = groups.map(g => `
+    <div>
+      <div class="px-4 py-1.5 bg-(--color-canvas-soft-2) text-xs font-mono uppercase tracking-wide text-(--color-mute)">${escHtml(formatDate(g.date))}</div>
+      ${g.items.map(entryRowHtml).join('')}
+    </div>
+  `).join('');
+}
+
+function entryRowHtml(e) {
+  const icon = CATEGORY_ICONS[e.category] || '📦';
+  const meta = [escHtml(getMemberName(e.memberId))];
+  if (e.place) meta.push(`📍 ${escHtml(e.place)}`);
+  if (e.splitWith?.length) meta.push(`split ${e.splitWith.length} way${e.splitWith.length !== 1 ? 's' : ''}`);
+
+  return `
+    <div class="flex items-start gap-3 px-4 py-3 group hover:bg-(--color-canvas-soft) transition-colors">
+      <span class="text-lg mt-0.5">${icon}</span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-start justify-between gap-2">
+          <span class="text-sm font-medium text-(--color-ink) truncate">${escHtml(e.description)}</span>
+          <span class="text-sm font-mono font-medium text-(--color-ink) flex-shrink-0">${fmt(e.amount)}</span>
+        </div>
+        <div class="text-xs text-(--color-mute) mt-0.5 truncate">${meta.join(' · ')}</div>
+      </div>
+      <button
+        onclick="gsRemoveEntry('${e.id}')"
+        class="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center text-(--color-mute) hover:text-(--color-error) transition-all rounded flex-shrink-0 mt-0.5"
+        title="Remove"
+      >
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  `;
+}
+
+// ─── Render: settlement ───────────────────────────────────────────────────────
+function renderSettlement() {
+  const monthKey = currentMonthKey();
+  const entries = filteredEntries(monthKey);
+  const balances = computeBalances(entries);
+  const settlements = computeSettlements({ ...balances });
+
+  const list = document.getElementById('gs-settlement-list');
+  const empty = document.getElementById('gs-settlement-empty');
+
+  if (settlements.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.innerHTML = settlements.map(s => {
+    const fromMember = getMember(s.from);
+    const toMember = getMember(s.to);
+    return `
+      <div class="flex items-center gap-4 px-4 py-3.5">
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          <span class="text-lg">${fromMember?.emoji || '🧑'}</span>
+          <div class="min-w-0">
+            <span class="text-sm font-medium text-(--color-ink)">${escHtml(fromMember?.name || 'Unknown')}</span>
+            <span class="text-xs text-(--color-mute) mx-1.5">owes</span>
+            <span class="text-sm font-medium text-(--color-ink)">${escHtml(toMember?.name || 'Unknown')}</span>
+          </div>
+        </div>
+        <span class="text-lg">${toMember?.emoji || '🧑'}</span>
+        <span class="font-mono text-sm font-semibold text-(--color-ink) ml-2 flex-shrink-0">${fmt(s.amount)}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ─── Render: all ──────────────────────────────────────────────────────────────
+function render() {
+  renderMembers();
+  renderMonthSelect();
+  renderEntries();
+  renderSettlement();
+  updateCurrencySymbol();
+}
+
+function updateCurrencySymbol() {
+  document.getElementById('ge-currency-symbol').textContent = state.currency.symbol;
+}
+
+// ─── Members CRUD ─────────────────────────────────────────────────────────────
+function addMember(name) {
+  name = name.trim();
+  if (!name) return;
+  const emoji = AVATARS[state.members.length % AVATARS.length];
+  state.members.push({ id: uid(), name, emoji });
+  saveState(); render();
+}
+
+window.gsRemoveMember = function (id) {
+  state.members = state.members.filter(m => m.id !== id);
+  state.entries = state.entries.map(e => ({
+    ...e,
+    splitWith: e.splitWith?.filter(mid => mid !== id) || [],
+  }));
+  saveState(); render();
+};
+
+// ─── Entries CRUD ─────────────────────────────────────────────────────────────
+function addEntry() {
+  const date = document.getElementById('ge-date').value || todayStr();
+  const place = document.getElementById('ge-place').value.trim();
+  const desc = document.getElementById('ge-desc').value.trim();
+  const amountRaw = parseFloat(document.getElementById('ge-amount').value);
+  const memberId = document.getElementById('ge-member').value;
+  const category = document.getElementById('ge-category').value;
+  const splitWith = [...document.querySelectorAll('.ge-split-check:checked')].map(cb => cb.value);
+
+  if (!memberId) { alert('Please select who spent this.'); return false; }
+  if (!amountRaw || amountRaw <= 0) { alert('Please enter a valid amount.'); return false; }
+
+  state.entries.push({
+    id: uid(), memberId, date, place, description: desc || 'Expense',
+    category, amount: amountRaw, splitWith, addedAt: new Date().toISOString(),
+  });
+
+  document.getElementById('ge-place').value = '';
+  document.getElementById('ge-desc').value = '';
+  document.getElementById('ge-amount').value = '';
+  document.querySelectorAll('.ge-split-check').forEach(cb => { cb.checked = false; });
+  document.getElementById('ge-toggle-all').checked = false;
+
+  saveState(); render();
+  return true;
+}
+
+window.gsRemoveEntry = function (id) {
+  state.entries = state.entries.filter(e => e.id !== id);
+  saveState(); render();
+};
+
+// ─── Sync: share link ─────────────────────────────────────────────────────────
+function buildShareLink() {
+  const encoded = utf8ToBase64(JSON.stringify(state));
+  return `${location.origin}${location.pathname}#${encoded}`;
+}
+
+function copyShareLink() {
+  const url = buildShareLink();
+  const finish = () => showToast('Share link copied — send it to your group.');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(finish).catch(() => prompt('Copy this link:', url));
+  } else {
+    prompt('Copy this link:', url);
+  }
+}
+
+function shareViaWhatsapp() {
+  const url = buildShareLink();
+  const text = `${state.groupName || 'Global Split'} — here's our shared expense ledger:`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank', 'noopener,noreferrer,width=600,height=600');
+}
+
+// ─── Sync: file export/import ────────────────────────────────────────────────
+function exportFile() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const monthKey = currentMonthKey();
+  const suffix = (state.groupName || 'global-split').trim().replace(/\s+/g, '-').toLowerCase();
+  a.download = `${suffix}-${monthKey}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const incoming = JSON.parse(String(reader.result));
+      const added = mergeState(incoming);
+      saveState(); render();
+      showToast(added > 0 ? `Imported — merged ${added} new expense${added !== 1 ? 's' : ''}.` : 'Imported — no new expenses found.');
+    } catch (_) {
+      alert('Could not read that file. Make sure it\'s a Global Split .json export.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ─── Printable monthly statement ─────────────────────────────────────────────
+function buildStatementHtml(monthKey) {
+  const entries = filteredEntries(monthKey);
+  const label = monthLabel(monthKey);
+  const balances = computeBalances(entries);
+  const settlements = computeSettlements({ ...balances });
+  const grandTotal = entries.reduce((s, e) => s + e.amount, 0);
+
+  const rows = entries.map(e => `
+    <tr>
+      <td>${escHtml(formatDate(e.date))}</td>
+      <td>${escHtml(e.place || '—')}</td>
+      <td>${escHtml(e.description)}</td>
+      <td>${escHtml(getMemberName(e.memberId))}</td>
+      <td style="text-align:right">${fmt(e.amount)}</td>
+    </tr>
+  `).join('');
+
+  const memberTotals = state.members.map(m => {
+    const total = entries.filter(e => e.memberId === m.id).reduce((s, e) => s + e.amount, 0);
+    return `<tr><td>${escHtml(m.name)}</td><td style="text-align:right">${fmt(total)}</td></tr>`;
+  }).join('');
+
+  const settlementItems = settlements.length
+    ? settlements.map(s => `<li>${escHtml(getMemberName(s.from))} owes ${escHtml(getMemberName(s.to))} — <strong>${fmt(s.amount)}</strong></li>`).join('')
+    : '<li>No shared expenses to settle this period.</li>';
+
+  return `
+    <h1>${escHtml(state.groupName || 'Global Split')}</h1>
+    <h2>Statement — ${escHtml(label)}</h2>
+    <div class="gs-meta">Generated ${new Date().toLocaleString()} · ${entries.length} entr${entries.length !== 1 ? 'ies' : 'y'}</div>
+    <table>
+      <thead><tr><th>Date</th><th>Place</th><th>Description</th><th>Spent by</th><th>Amount</th></tr></thead>
+      <tbody>
+        ${rows || '<tr><td colspan="5">No expenses recorded for this period.</td></tr>'}
+        <tr class="gs-total-row"><td colspan="4">Grand total</td><td style="text-align:right">${fmt(grandTotal)}</td></tr>
+      </tbody>
+    </table>
+    <h3>Totals by member</h3>
+    <table><tbody>${memberTotals || '<tr><td>No members added.</td></tr>'}</tbody></table>
+    <h3>Settlement</h3>
+    <ul>${settlementItems}</ul>
+  `;
+}
+
+function printStatement() {
+  const monthKey = currentMonthKey();
+  document.getElementById('gs-printable-area').innerHTML = buildStatementHtml(monthKey);
+  window.print();
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+
+  const currSel = document.getElementById('gs-currency-select');
+  CURRENCIES.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.code;
+    opt.textContent = `${c.symbol} ${c.code} — ${c.name}`;
+    if (c.code === state.currency.code) opt.selected = true;
+    currSel.appendChild(opt);
+  });
+
+  document.getElementById('gs-group-name').value = state.groupName;
+  document.getElementById('ge-date').value = todayStr();
+
+  render();
+
+  document.getElementById('gs-group-name').addEventListener('input', e => {
+    state.groupName = e.target.value;
+    saveState();
+  });
+
+  currSel.addEventListener('change', e => {
+    state.currency = CURRENCIES.find(c => c.code === e.target.value) || CURRENCIES[0];
+    saveState(); render();
+  });
+
+  document.getElementById('gs-month-select').addEventListener('change', () => {
+    renderEntries(); renderSettlement();
+  });
+
+  // Members
+  document.getElementById('gs-add-member-btn').addEventListener('click', () => {
+    const input = document.getElementById('gs-new-member-input');
+    addMember(input.value);
+    input.value = '';
+    input.focus();
+  });
+  document.getElementById('gs-new-member-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      addMember(e.target.value);
+      e.target.value = '';
+    }
+  });
+
+  // Split-with toggle all
+  document.getElementById('ge-toggle-all').addEventListener('change', e => {
+    document.querySelectorAll('.ge-split-check').forEach(c => { c.checked = e.target.checked; });
+  });
+
+  // Add expense
+  document.getElementById('ge-add-btn').addEventListener('click', addEntry);
+
+  // Sync menu
+  const shareBtn = document.getElementById('gs-share-btn');
+  const shareMenu = document.getElementById('gs-share-menu');
+  shareBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    shareMenu.classList.toggle('hidden');
+  });
+  document.addEventListener('click', e => {
+    if (!shareMenu.classList.contains('hidden') && !shareMenu.contains(e.target) && e.target !== shareBtn) {
+      shareMenu.classList.add('hidden');
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') shareMenu.classList.add('hidden');
+  });
+
+  document.getElementById('gs-copy-link').addEventListener('click', () => { copyShareLink(); shareMenu.classList.add('hidden'); });
+  document.getElementById('gs-share-whatsapp').addEventListener('click', () => { shareViaWhatsapp(); shareMenu.classList.add('hidden'); });
+  document.getElementById('gs-export-file').addEventListener('click', () => { exportFile(); shareMenu.classList.add('hidden'); });
+
+  const fileInput = document.getElementById('gs-file-input');
+  document.getElementById('gs-import-file').addEventListener('click', () => { fileInput.click(); shareMenu.classList.add('hidden'); });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) importFile(fileInput.files[0]);
+    fileInput.value = '';
+  });
+
+  // Print statement
+  document.getElementById('gs-print-btn').addEventListener('click', printStatement);
+
+  // Reset
+  document.getElementById('gs-reset-btn').addEventListener('click', () => {
+    if (!confirm('Reset Global Split? This clears members and all logged expenses on this device. This cannot be undone.')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    state = { id: uid(), groupName: '', currency: CURRENCIES[0], members: [], entries: [] };
+    document.getElementById('gs-group-name').value = '';
+    currSel.value = 'USD';
+    render();
+  });
+});
+</script>
