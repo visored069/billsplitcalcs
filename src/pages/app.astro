@@ -44,11 +44,37 @@ import Footer from '../components/Footer.astro';
           <select id="currency-select" class="custom-select h-8 pl-3 pr-8 text-xs text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-md appearance-none cursor-pointer hover:border-(--color-hairline-strong) transition-colors focus:outline-none focus:ring-1 focus:ring-(--color-primary)">
           </select>
 
-          <!-- Share button -->
-          <button id="share-btn" class="h-8 px-3 text-xs font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-md hover:bg-(--color-canvas-soft-2) transition-colors flex items-center gap-1.5">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 1.5L10.5 3 9 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 3H4.5C3.119 3 2 4.119 2 5.5V5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-            <span data-i18n="share">Share</span>
-          </button>
+          <!-- Share button + dropdown -->
+          <div class="relative">
+            <button id="share-btn" class="h-8 px-3 text-xs font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-md hover:bg-(--color-canvas-soft-2) transition-colors flex items-center gap-1.5">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9 1.5L10.5 3 9 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 3H4.5C3.119 3 2 4.119 2 5.5V5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <span data-i18n="share">Share</span>
+            </button>
+
+            <div id="share-menu" class="hidden absolute right-0 top-9 z-20 w-44 bg-(--color-canvas) border border-(--color-hairline) rounded-lg shadow-l4 overflow-hidden">
+              <button class="share-option w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors" data-platform="whatsapp">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.6 2.4A7.5 7.5 0 002 11.8L1 15l3.3-1a7.5 7.5 0 009.3-11.6z" stroke="#25D366" stroke-width="1.3"/><path d="M5.7 5.2c.2-.4.4-.4.6-.4h.4c.15 0 .35 0 .5.4.2.4.6 1.4.65 1.5.05.1.1.25 0 .4-.1.15-.15.25-.3.4l-.4.45c-.15.15-.3.3-.15.55.15.25.65 1.05 1.4 1.7.95.85 1.7 1.1 1.95 1.25.25.15.4.1.55-.05l.55-.6c.2-.2.35-.2.55-.1l1.3.65c.2.1.35.15.4.25.05.1.05.6-.15 1.15-.2.55-1.15 1.05-1.6 1.1-.4.05-.9.1-1.5-.1a10.2 10.2 0 01-1.2-.45A8 8 0 015 8.9a4.3 4.3 0 01-.9-2.3c0-.6.25-1 .35-1.15z" fill="#25D366"/></svg>
+                WhatsApp
+              </button>
+              <button class="share-option w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors" data-platform="facebook">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M15 8a7 7 0 10-8.1 6.9v-4.9H5.1V8H6.9V6.5c0-1.8 1.1-2.8 2.7-2.8.8 0 1.6.15 1.6.15v1.7h-.9c-.9 0-1.15.55-1.15 1.1V8h2l-.3 2h-1.7v4.9A7 7 0 0015 8z" fill="#1877F2"/></svg>
+                Facebook
+              </button>
+              <button class="share-option w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors" data-platform="telegram">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M15 8A7 7 0 111 8a7 7 0 0114 0z" fill="#26A5E4"/><path d="M4 7.9l7-2.7c.3-.15.65.1.5.55l-1.2 5.65c-.1.4-.35.5-.7.3l-1.9-1.4-.9.9c-.1.1-.2.15-.35.15l.15-1.85 3.4-3.05c.15-.15-.05-.25-.2-.1L5.6 8.8l-1.85-.6c-.4-.15-.4-.4.25-.65z" fill="white"/></svg>
+                Telegram
+              </button>
+              <button class="share-option w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors" data-platform="email">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 4.5l6 4.5 6-4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Email
+              </button>
+              <div class="border-t border-(--color-hairline)"></div>
+              <button class="share-option w-full flex items-center gap-2.5 px-3 py-2 text-sm text-(--color-ink) hover:bg-(--color-canvas-soft-2) transition-colors" data-platform="copy">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.3"/></svg>
+                <span data-i18n="copyLink">Copy Link</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -329,6 +355,7 @@ const TRANSLATIONS = {
     owes: 'owes', settled: 'All settled up!', addFirst: 'Add members first.',
     copied: 'Copied!', resetConfirm: 'Reset everything? This cannot be undone.',
     clearExpenses: 'Clear', clearExpensesConfirm: 'Clear all expenses? Members and group name are kept.',
+    copyLink: 'Copy Link',
   },
   es: {
     members: 'Miembros', expenses: 'Gastos', results: 'Resultados',
@@ -339,6 +366,7 @@ const TRANSLATIONS = {
     owes: 'debe', settled: '¡Todo liquidado!', addFirst: 'Agrega miembros primero.',
     copied: '¡Copiado!', resetConfirm: '¿Reiniciar todo? No se puede deshacer.',
     clearExpenses: 'Borrar', clearExpensesConfirm: '¿Borrar todos los gastos? Los miembros y el nombre del grupo se conservan.',
+    copyLink: 'Copiar enlace',
   },
   fr: {
     members: 'Membres', expenses: 'Dépenses', results: 'Résultats',
@@ -349,6 +377,7 @@ const TRANSLATIONS = {
     owes: 'doit', settled: 'Tout est réglé!', addFirst: 'Ajoutez des membres d\'abord.',
     copied: 'Copié!', resetConfirm: 'Tout réinitialiser? Cela ne peut pas être annulé.',
     clearExpenses: 'Effacer', clearExpensesConfirm: 'Effacer toutes les dépenses? Les membres et le nom du groupe sont conservés.',
+    copyLink: 'Copier le lien',
   },
   de: {
     members: 'Mitglieder', expenses: 'Ausgaben', results: 'Ergebnisse',
@@ -359,6 +388,7 @@ const TRANSLATIONS = {
     owes: 'schuldet', settled: 'Alles ausgeglichen!', addFirst: 'Erst Mitglieder hinzufügen.',
     copied: 'Kopiert!', resetConfirm: 'Alles zurücksetzen? Dies kann nicht rückgängig gemacht werden.',
     clearExpenses: 'Löschen', clearExpensesConfirm: 'Alle Ausgaben löschen? Mitglieder und Gruppenname bleiben erhalten.',
+    copyLink: 'Link kopieren',
   },
   pt: {
     members: 'Membros', expenses: 'Despesas', results: 'Resultados',
@@ -369,6 +399,7 @@ const TRANSLATIONS = {
     owes: 'deve', settled: 'Tudo liquidado!', addFirst: 'Adicione membros primeiro.',
     copied: 'Copiado!', resetConfirm: 'Redefinir tudo? Isso não pode ser desfeito.',
     clearExpenses: 'Limpar', clearExpensesConfirm: 'Limpar todas as despesas? Membros e nome do grupo são mantidos.',
+    copyLink: 'Copiar link',
   },
   ja: {
     members: 'メンバー', expenses: '支出', results: '結果',
@@ -379,6 +410,7 @@ const TRANSLATIONS = {
     owes: 'は', settled: '全員精算済み！', addFirst: '先にメンバーを追加してください。',
     copied: 'コピーしました！', resetConfirm: 'すべてリセットしますか？元に戻せません。',
     clearExpenses: 'クリア', clearExpensesConfirm: 'すべての支出を削除しますか？メンバーとグループ名は保持されます。',
+    copyLink: 'リンクをコピー',
   },
   zh: {
     members: '成员', expenses: '费用', results: '结果',
@@ -389,6 +421,7 @@ const TRANSLATIONS = {
     owes: '欠', settled: '全部结清！', addFirst: '请先添加成员。',
     copied: '已复制！', resetConfirm: '重置所有内容？此操作无法撤销。',
     clearExpenses: '清除', clearExpensesConfirm: '清除所有费用？成员和小组名称将被保留。',
+    copyLink: '复制链接',
   },
   hi: {
     members: 'सदस्य', expenses: 'खर्च', results: 'परिणाम',
@@ -399,6 +432,7 @@ const TRANSLATIONS = {
     owes: 'का', settled: 'सब बराबर!', addFirst: 'पहले सदस्य जोड़ें।',
     copied: 'कॉपी हो गया!', resetConfirm: 'सब कुछ रीसेट करें? यह पूर्ववत नहीं किया जा सकता।',
     clearExpenses: 'साफ़ करें', clearExpensesConfirm: 'सभी खर्च साफ़ करें? सदस्य और समूह का नाम बना रहेगा।',
+    copyLink: 'लिंक कॉपी करें',
   },
   ar: {
     members: 'الأعضاء', expenses: 'المصاريف', results: 'النتائج',
@@ -409,6 +443,7 @@ const TRANSLATIONS = {
     owes: 'مدين لـ', settled: 'الجميع متساوون!', addFirst: 'أضف أعضاء أولاً.',
     copied: 'تم النسخ!', resetConfirm: 'إعادة تعيين كل شيء؟ لا يمكن التراجع.',
     clearExpenses: 'مسح', clearExpensesConfirm: 'مسح جميع المصاريف؟ سيتم الاحتفاظ بالأعضاء واسم المجموعة.',
+    copyLink: 'نسخ الرابط',
   },
   ko: {
     members: '멤버', expenses: '지출', results: '결과',
@@ -419,6 +454,7 @@ const TRANSLATIONS = {
     owes: '에게', settled: '모두 정산 완료!', addFirst: '먼저 멤버를 추가하세요.',
     copied: '복사됨!', resetConfirm: '모든 것을 재설정하시겠습니까? 되돌릴 수 없습니다.',
     clearExpenses: '지우기', clearExpensesConfirm: '모든 지출을 지우시겠습니까? 멤버와 그룹 이름은 유지됩니다.',
+    copyLink: '링크 복사',
   },
   it: {
     members: 'Membri', expenses: 'Spese', results: 'Risultati',
@@ -429,6 +465,7 @@ const TRANSLATIONS = {
     owes: 'deve a', settled: 'Tutti in pari!', addFirst: 'Aggiungi prima i membri.',
     copied: 'Copiato!', resetConfirm: 'Resetta tutto? Non è possibile annullare.',
     clearExpenses: 'Cancella', clearExpensesConfirm: 'Cancellare tutte le spese? Membri e nome del gruppo verranno mantenuti.',
+    copyLink: 'Copia link',
   },
   tr: {
     members: 'Üyeler', expenses: 'Harcamalar', results: 'Sonuçlar',
@@ -439,6 +476,7 @@ const TRANSLATIONS = {
     owes: 'borçlu', settled: 'Herkes ödeşti!', addFirst: 'Önce üye ekleyin.',
     copied: 'Kopyalandı!', resetConfirm: 'Her şeyi sıfırla? Bu geri alınamaz.',
     clearExpenses: 'Temizle', clearExpensesConfirm: 'Tüm harcamalar temizlensin mi? Üyeler ve grup adı korunur.',
+    copyLink: 'Bağlantıyı kopyala',
   },
   ta: {
     members: 'உறுப்பினர்கள்', expenses: 'செலவுகள்', results: 'முடிவுகள்',
@@ -449,6 +487,7 @@ const TRANSLATIONS = {
     owes: 'கொடுக்க வேண்டும்', settled: 'அனைவரும் சரி!', addFirst: 'முதலில் உறுப்பினர்களைச் சேர்க்கவும்.',
     copied: 'நகலெடுக்கப்பட்டது!', resetConfirm: 'அனைத்தையும் மீட்டமைக்கவா? இதை மாற்ற முடியாது.',
     clearExpenses: 'அழி', clearExpensesConfirm: 'அனைத்து செலவுகளையும் அழிக்கவா? உறுப்பினர்கள் மற்றும் குழு பெயர் பாதுகாக்கப்படும்.',
+    copyLink: 'இணைப்பை நகலெடு',
   },
   te: {
     members: 'సభ్యులు', expenses: 'ఖర్చులు', results: 'ఫలితాలు',
@@ -459,6 +498,7 @@ const TRANSLATIONS = {
     owes: 'బాకీ', settled: 'అందరూ సెటిల్ అయ్యారు!', addFirst: 'ముందు సభ్యులను జోడించండి.',
     copied: 'కాపీ చేయబడింది!', resetConfirm: 'అన్నింటినీ రీసెట్ చేయాలా? దీన్ని రద్దు చేయలేరు.',
     clearExpenses: 'క్లియర్', clearExpensesConfirm: 'అన్ని ఖర్చులను క్లియర్ చేయాలా? సభ్యులు మరియు గ్రూప్ పేరు అలాగే ఉంటాయి.',
+    copyLink: 'లింక్ కాపీ చేయండి',
   },
   mr: {
     members: 'सदस्य', expenses: 'खर्च', results: 'निकाल',
@@ -469,6 +509,7 @@ const TRANSLATIONS = {
     owes: 'देणे आहे', settled: 'सर्व सेटल झाले!', addFirst: 'आधी सदस्य जोडा.',
     copied: 'कॉपी केले!', resetConfirm: 'सर्वकाही रीसेट करायचे? हे पूर्ववत करता येणार नाही.',
     clearExpenses: 'साफ करा', clearExpensesConfirm: 'सर्व खर्च साफ करायचे? सदस्य आणि गटाचे नाव कायम राहील.',
+    copyLink: 'दुवा कॉपी करा',
   },
   pcm: {
     members: 'Members', expenses: 'Wetin Dem Spend', results: 'Results',
@@ -479,6 +520,7 @@ const TRANSLATIONS = {
     owes: 'owe', settled: 'Everybody don balance!', addFirst: 'Add members first.',
     copied: 'E don copy!', resetConfirm: 'You wan reset everything? E no fit undo.',
     clearExpenses: 'Clear', clearExpensesConfirm: 'Clear all expenses? Members and group name go stay.',
+    copyLink: 'Copy di link',
   },
   id: {
     members: 'Anggota', expenses: 'Pengeluaran', results: 'Hasil',
@@ -489,6 +531,7 @@ const TRANSLATIONS = {
     owes: 'berutang kepada', settled: 'Semua sudah lunas!', addFirst: 'Tambahkan anggota dulu.',
     copied: 'Disalin!', resetConfirm: 'Reset semua? Ini tidak bisa dibatalkan.',
     clearExpenses: 'Hapus', clearExpensesConfirm: 'Hapus semua pengeluaran? Anggota dan nama grup tetap disimpan.',
+    copyLink: 'Salin tautan',
   },
   ur: {
     members: 'اراکین', expenses: 'اخراجات', results: 'نتائج',
@@ -499,6 +542,7 @@ const TRANSLATIONS = {
     owes: 'کا مقروض ہے', settled: 'سب برابر ہیں!', addFirst: 'پہلے اراکین شامل کریں۔',
     copied: 'کاپی ہو گیا!', resetConfirm: 'سب کچھ ری سیٹ کریں؟ اسے واپس نہیں کیا جا سکتا۔',
     clearExpenses: 'صاف کریں', clearExpensesConfirm: 'تمام اخراجات صاف کریں؟ اراکین اور گروپ کا نام محفوظ رہیں گے۔',
+    copyLink: 'لنک کاپی کریں',
   },
   bn: {
     members: 'সদস্য', expenses: 'খরচ', results: 'ফলাফল',
@@ -509,6 +553,7 @@ const TRANSLATIONS = {
     owes: 'পাওনা', settled: 'সবাই মিটে গেছে!', addFirst: 'প্রথমে সদস্য যোগ করুন।',
     copied: 'কপি হয়েছে!', resetConfirm: 'সব কিছু রিসেট করবেন? এটি ফিরিয়ে আনা যাবে না।',
     clearExpenses: 'মুছুন', clearExpensesConfirm: 'সমস্ত খরচ মুছবেন? সদস্য এবং গ্রুপের নাম রাখা হবে।',
+    copyLink: 'লিঙ্ক কপি করুন',
   },
 };
 
@@ -1016,19 +1061,45 @@ function updateTipCalc() {
 }
 
 // ─── Share ────────────────────────────────────────────────────────────────────
-function shareLink() {
+function shareMessage() {
+  const groupName = state.name || 'Bill Split';
+  return `${groupName} — split the bill with me:`;
+}
+
+function copyShareLink() {
   const url = location.href;
+  const finish = () => {
+    const btn = document.getElementById('share-btn');
+    const span = btn.querySelector('span');
+    const orig = span.textContent;
+    span.textContent = t('copied');
+    setTimeout(() => { span.textContent = orig; }, 2000);
+  };
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(() => {
-      const btn = document.getElementById('share-btn');
-      const span = btn.querySelector('span');
-      const orig = span.textContent;
-      span.textContent = t('copied');
-      setTimeout(() => { span.textContent = orig; }, 2000);
-    });
+    navigator.clipboard.writeText(url).then(finish).catch(() => prompt('Copy this link:', url));
   } else {
     prompt('Copy this link:', url);
   }
+}
+
+function shareVia(platform) {
+  const url = location.href;
+  const text = shareMessage();
+
+  if (platform === 'copy') { copyShareLink(); return; }
+
+  if (platform === 'email') {
+    location.href = `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(text + '\n' + url)}`;
+    return;
+  }
+
+  const shareUrls = {
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+    telegram: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
+  };
+  const target = shareUrls[platform];
+  if (target) window.open(target, '_blank', 'noopener,noreferrer,width=600,height=600');
 }
 
 // ─── Copy results ─────────────────────────────────────────────────────────────
@@ -1171,8 +1242,28 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('exp-desc').focus();
   });
 
-  // Share & copy
-  document.getElementById('share-btn').addEventListener('click', shareLink);
+  // Share menu
+  const shareBtn = document.getElementById('share-btn');
+  const shareMenu = document.getElementById('share-menu');
+  shareBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    shareMenu.classList.toggle('hidden');
+  });
+  shareMenu.querySelectorAll('.share-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      shareVia(opt.dataset.platform);
+      shareMenu.classList.add('hidden');
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!shareMenu.classList.contains('hidden') && !shareMenu.contains(e.target) && e.target !== shareBtn) {
+      shareMenu.classList.add('hidden');
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') shareMenu.classList.add('hidden');
+  });
+
   document.getElementById('copy-results-btn').addEventListener('click', copyResults);
 
   // Clear expenses (and therefore the results) without touching members/group name
