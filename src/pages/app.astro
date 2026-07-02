@@ -133,8 +133,8 @@ import Footer from '../components/Footer.astro';
 
           <!-- Section label + jump-to-results shortcut -->
           <div class="flex items-center justify-between">
-            <span class="text-sm font-medium text-(--color-ink)" data-i18n="expenses">Expenses</span>
-            <button id="jump-to-results" class="text-xs font-medium text-(--color-link) hover:text-(--color-link-deep) transition-colors flex items-center gap-1">
+            <span class="inline-flex items-center px-3 py-1 rounded-md border border-(--color-hairline) bg-(--color-canvas) text-sm font-medium text-(--color-ink)" data-i18n="expenses">Expenses</span>
+            <button id="jump-to-results" class="inline-flex items-center gap-1 px-3 py-1 rounded-md border border-(--color-violet) text-sm font-medium text-(--color-violet) hover:bg-(--color-violet) hover:text-white transition-colors">
               <span data-i18n="results">Results</span>
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
@@ -204,7 +204,10 @@ import Footer from '../components/Footer.astro';
                 <div>
                   <div class="flex items-center justify-between mb-1.5">
                     <label class="text-xs text-(--color-mute) font-mono uppercase tracking-wide" data-i18n="splitWith">Split with</label>
-                    <button id="toggle-all-members" class="text-xs text-(--color-link) hover:text-(--color-link-deep) transition-colors">All</button>
+                    <label class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-(--color-hairline) cursor-pointer hover:border-(--color-hairline-strong) transition-colors">
+                      <input type="checkbox" id="toggle-all-members" class="w-3.5 h-3.5 rounded border-(--color-hairline) accent-(--color-primary)" />
+                      <span class="text-xs font-medium text-(--color-ink)">All</span>
+                    </label>
                   </div>
                   <div id="split-with-list" class="space-y-1.5 max-h-48 overflow-y-auto">
                     <!-- JS rendered: checkboxes per member with optional value input -->
@@ -654,6 +657,7 @@ function renderSplitWith() {
   if (state.members.length === 0) {
     container.innerHTML = '';
     empty.style.display = '';
+    syncToggleAllCheckbox();
     return;
   }
   empty.style.display = 'none';
@@ -676,6 +680,22 @@ function renderSplitWith() {
       </label>
     `;
   }).join('');
+
+  syncToggleAllCheckbox();
+}
+
+// ─── Keep the "All" checkbox in sync with individual member checkboxes ──────
+function syncToggleAllCheckbox() {
+  const toggleAll = document.getElementById('toggle-all-members');
+  const checks = document.querySelectorAll('.split-member-check');
+  if (checks.length === 0) {
+    toggleAll.checked = false;
+    toggleAll.indeterminate = false;
+    return;
+  }
+  const checkedCount = [...checks].filter(c => c.checked).length;
+  toggleAll.checked = checkedCount === checks.length;
+  toggleAll.indeterminate = checkedCount > 0 && checkedCount < checks.length;
 }
 
 // ─── Render: expense list ────────────────────────────────────────────────────
@@ -1007,10 +1027,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Toggle all members
-  document.getElementById('toggle-all-members').addEventListener('click', () => {
-    const checks = document.querySelectorAll('.split-member-check');
-    const allChecked = [...checks].every(c => c.checked);
-    checks.forEach(c => { c.checked = !allChecked; });
+  document.getElementById('toggle-all-members').addEventListener('change', e => {
+    document.querySelectorAll('.split-member-check').forEach(c => { c.checked = e.target.checked; });
+  });
+
+  // Keep the "All" checkbox in sync when an individual member is (un)checked
+  document.getElementById('split-with-list').addEventListener('change', e => {
+    if (e.target.classList.contains('split-member-check')) syncToggleAllCheckbox();
   });
 
   // Add expense
