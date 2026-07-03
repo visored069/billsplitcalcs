@@ -4,12 +4,26 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  keywords?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  /** One or more JSON-LD structured data objects to embed. */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
-  title = 'BillSplit Calcs — Split Bills Effortlessly.',
-  description = 'Split bills with friends, family, or colleagues. Multi-currency, multi-language, zero signup required.',
+  title = 'Bill Splitter — Free Online Bill Split Calculator | BillSplit Calcs',
+  description = 'Split any bill fairly in seconds with our free bill splitter. Handle restaurant bills, tax and tip, rent, utilities, and group trips — no signup, no app, 150+ currencies.',
+  keywords = 'bill splitter, restaurant bill split calculator, bill split calculator with tax and tip, fair bill split calculator, equitable bill split calculator, proportional bill split calculator, food bill split calculator, utility bill split calculator, couple bill split calculator, group bill split calculator, online bill split calculator, income bill split calculator, bill split calculator online, dinner bill split calculator, free restaurant bill split calculator, monthly bill split calculator, household bill split calculator',
+  image = '/og-image.png',
+  type = 'website',
+  schema,
 } = Astro.props;
+
+const normalizedPath = Astro.url.pathname.length > 1 ? Astro.url.pathname.replace(/\/$/, '') : Astro.url.pathname;
+const canonicalURL = new URL(normalizedPath, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
+const schemaList = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
 
 <!doctype html>
@@ -18,7 +32,16 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="BillSplit Calcs" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="bill split" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
     <script is:inline>
       (function () {
@@ -30,6 +53,29 @@ const {
       })();
     </script>
     <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="BillSplit Calcs — free online bill splitter" />
+    <meta property="og:site_name" content="BillSplit Calcs" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    {schemaList.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />

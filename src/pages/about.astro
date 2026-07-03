@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About BillSplit Calcs',
+  url: 'https://www.billsplitcalcs.com/about',
+  about: {
+    '@type': 'Organization',
+    name: 'BillSplit Calcs',
+    url: 'https://www.billsplitcalcs.com/',
+    description: 'A free, no-signup bill splitter and bill split calculator for restaurants, trips, couples, and households.',
+  },
+};
+---
+
+<Layout
+  title="About Us — BillSplit Calcs"
+  description="Learn why BillSplit Calcs was built: a free, no-signup bill splitter that keeps your expense data in your browser, not on our servers."
+  keywords="about billsplit calcs, bill splitter, free bill split calculator"
+  schema={orgSchema}
+>
+  <Nav currentPath="/about" />
+
+  <main class="min-h-screen bg-(--color-canvas-soft) py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-10">
+        <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Company</div>
+        <h1 class="text-4xl md:text-5xl font-semibold text-(--color-ink) tracking-[-1.6px] leading-tight mb-3">About BillSplit Calcs</h1>
+        <p class="text-(--color-body)">The free bill splitter built for the moment the check arrives.</p>
+      </div>
+
+      <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 p-6 md:p-10 space-y-8 text-(--color-body) leading-7">
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Why we built this</h2>
+          <p>
+            Splitting a bill shouldn't require downloading an app, creating an account, or handing your spending habits over to a company. Most existing tools ask for a signup before you can even add your first expense — which is a strange amount of friction for something as simple as figuring out who owes whom for dinner. BillSplit Calcs exists to remove that friction entirely: open the page, add your group, and you have an answer in under a minute.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">What we built</h2>
+          <p>
+            BillSplit Calcs is a free online bill split calculator that handles the situations a basic calculator can't: uneven orders, tax and tip, weighted shares for people who spent more, and settlement plans that minimize the number of payments needed to make everyone even. Alongside the core bill splitter, <a href="/global-split" class="text-(--color-link) hover:underline">Global Split</a> handles recurring household and trip expenses across a whole month, and the tool supports 150+ currencies and a 10+ language interface so it works the same whether your group is splitting dollars, euros, or rupees.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Our approach to privacy</h2>
+          <p>
+            There's no account system because there's no server database behind this tool. Your group, your expenses, and your settlement history are stored locally in your own browser. If you want to share a split with your group, the data is encoded directly into a link or an exported file — it never passes through or sits on a BillSplit Calcs server. You can read the full details in our <a href="/privacy" class="text-(--color-link) hover:underline">Privacy Policy</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Who it's for</h2>
+          <p>
+            Roommates dividing rent and utilities, couples managing a shared budget, friends settling a restaurant bill, groups closing out a trip, or anyone who's tired of doing the math on a napkin. If a bill needs to be divided fairly among more than one person, BillSplit Calcs is built to handle it.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Get in touch</h2>
+          <p>
+            Have feedback, found a bug, or have a feature you'd like to see? Visit our <a href="/contact" class="text-(--color-link) hover:underline">Contact page</a> — we read every message.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

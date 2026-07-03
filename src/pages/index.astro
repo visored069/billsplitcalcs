@@ -2,9 +2,109 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+
+const faqs = [
+  {
+    q: 'How to split a bill calculator?',
+    a: 'Add everyone in your group, then log each expense with the amount and who paid for it. Choose how that expense should be split — equally, by percentage, or by weighted shares — and BillSplit Calcs instantly calculates each person’s balance and the simplest way to settle up.',
+  },
+  {
+    q: "How do I split a bill if one person didn't drink alcohol?",
+    a: 'Add the alcohol as its own expense line instead of lumping it into the total bill, then use the "Split with" list to include only the people who actually drank. Everyone else is automatically excluded from that one item while still sharing the rest of the bill normally.',
+  },
+  {
+    q: 'Are tips and tax calculated before or after splitting the total?',
+    a: 'Before. Use the built-in tip calculator to add tax and tip on top of the subtotal, then add that grand total as the expense to split. Tax and tip are applied proportionally to each person’s share, so nobody pays a flat tip amount regardless of what they ordered.',
+  },
+  {
+    q: 'What should we do if the restaurant automatically adds a service charge?',
+    a: 'Treat it the same way as tax or tip — fold it into the subtotal before splitting, or add it as its own line item split equally across the table. Either way, add it as a real expense so it’s included in the settlement instead of being paid separately.',
+  },
+  {
+    q: 'How do we handle shared appetizers or a bottle of wine for the table?',
+    a: 'Log it as a separate expense and choose exactly who’s splitting it in the "Split with" list. This keeps shared items fair without forcing everyone to pay for a starter or bottle of wine they never touched.',
+  },
+  {
+    q: 'Can we split expenses based on our salaries instead of an even split?',
+    a: 'Yes. Switch the split type to Percentage or Shares and assign each person a value that reflects their income — this works as an income-based bill split calculator so rent and bills are divided proportionally instead of straight down the middle.',
+  },
+  {
+    q: 'How do I handle a situation where one person ate way more than everyone else?',
+    a: 'Use the Shares split type and give that person a higher weight — for example 2 shares against everyone else’s 1 — or log their extra order as a separate expense split only with them. Both approaches keep the split proportional instead of equal.',
+  },
+  {
+    q: 'What is the fairest way to calculate a group bill with couples?',
+    a: 'It depends on how the couple wants to be treated. You can add both partners individually and split everything equally or by percentage like anyone else in the group, or combine their spending into one weighted share if they’d rather be counted as a single unit.',
+  },
+  {
+    q: 'Can this calculator handle ongoing trip expenses with multiple people paying for different things?',
+    a: 'Yes. Add every expense as it happens, noting who paid — flights, hotels, dinners, cabs — and BillSplit Calcs keeps a running balance for each person. At the end of the trip it generates an optimized settlement plan that minimizes the number of payments needed to make everyone even.',
+  },
+  {
+    q: 'How do roommates split a utility bill if one person was away for half the month?',
+    a: 'Use a percentage or share-based split and give the absent roommate a smaller share for that month — for example half a share instead of a full one — rather than splitting the bill evenly. The Global Split tool is built for exactly this: logging monthly household expenses and reconciling them fairly at month’s end.',
+  },
+  {
+    q: 'Can I split large group costs like Airbnb bookings or festival tickets?',
+    a: 'Yes, there’s no limit on the amount or number of people. Add the booking or tickets as a single expense, mark who paid, and choose who it should be split among — the same equal, percentage, or share-based logic applies whether it’s a $40 dinner or a $4,000 Airbnb.',
+  },
+  {
+    q: 'Do my friends need to download an app or create an account to see the split?',
+    a: 'No. BillSplit Calcs runs entirely in the browser with no signup. Share the results with a link, or send them directly via WhatsApp, email, or another platform — whoever opens it sees the exact same breakdown without installing anything.',
+  },
+  {
+    q: "Can I save our group's expense history for later reference?",
+    a: 'Your group and expenses are saved automatically in your browser, so they’re there when you come back. You can also export a JSON file or generate a printable monthly statement with Global Split, or share a link that encodes a full snapshot of the group’s data.',
+  },
+  {
+    q: 'Does this bill split calculator support international currencies?',
+    a: 'Yes — BillSplit Calcs supports 150+ currencies with correct symbols and formatting, from USD and EUR to JPY and INR. Pick a currency from the dropdown and every amount, balance, and settlement updates to match it automatically.',
+  },
+];
+
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'BillSplit Calcs — Bill Splitter',
+  url: 'https://www.billsplitcalcs.com/',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any (Web-based)',
+  description:
+    'A free online bill splitter and bill split calculator for restaurants, groups, couples, and households. Split bills fairly with tax and tip, percentages, or weighted shares — no signup required.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  featureList: [
+    'Restaurant bill split calculator with tax and tip',
+    'Fair, equitable, and proportional split types',
+    'Group and couple bill splitting',
+    'Household and utility bill splitting',
+    'Monthly recurring bill splitting (Global Split)',
+    '150+ currencies and 10+ languages',
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
+  })),
+};
 ---
 
-<Layout title="BillSplit Calcs — Split Bills Effortlessly.">
+<Layout
+  title="Bill Splitter — Free Online Bill Split Calculator | BillSplit Calcs"
+  description="BillSplit Calcs is a free bill splitter for restaurants, groups, couples, and households. Split any bill fairly with tax and tip, percentages, or shares — no signup, 150+ currencies."
+  schema={[webAppSchema, faqSchema]}
+>
   <Nav currentPath="/" />
 
   <!-- Hero -->
@@ -29,7 +129,7 @@ import Footer from '../components/Footer.astro';
 
       <!-- Body -->
       <p class="text-lg md:text-xl text-(--color-body) max-w-2xl mx-auto mb-10 leading-7">
-        Add people, add expenses, see who owes whom — instantly. Supports 150+ currencies, 10+ languages, and optimized settlements.
+        A free <strong class="text-(--color-ink) font-medium">bill splitter</strong> for restaurants, groups, and households. Add people, add expenses, see who owes whom — instantly. Supports 150+ currencies, 10+ languages, and optimized settlements.
       </p>
 
       <!-- CTAs -->
@@ -196,6 +296,105 @@ import Footer from '../components/Footer.astro';
       <a href="/app" class="inline-flex items-center justify-center h-12 px-8 text-base font-medium text-(--color-on-primary) bg-(--color-primary) rounded-full hover:opacity-90 transition-opacity duration-150">
         Start Splitting — it's free
       </a>
+    </div>
+  </section>
+
+  <!-- SEO content: about the tool -->
+  <section class="bg-(--color-canvas-soft) py-24 border-t border-(--color-hairline)">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3 text-center">About the tool</div>
+      <h2 class="text-3xl md:text-4xl font-semibold text-(--color-ink) tracking-[-1.28px] leading-tight mb-8 text-center">
+        The free bill splitter for every kind of shared expense.
+      </h2>
+
+      <div class="space-y-5 text-(--color-body) leading-7 text-[15px]">
+        <p>
+          BillSplit Calcs is a free <strong class="text-(--color-ink)">bill splitter</strong> built to make dividing shared costs painless, whether you're at a restaurant table, closing out a group trip, or reconciling a household budget. As an <strong class="text-(--color-ink)">online bill split calculator</strong>, it runs entirely in your browser — add the people involved, log what was spent, and get an instant, accurate breakdown of who owes what. There's no account to create and no premium tier to hit; every feature of this <strong class="text-(--color-ink)">bill split calculator online</strong>, from unlimited expenses to shareable links, is free forever. Behind the simple interface is a settlement algorithm that minimizes the number of payments needed to make everyone even, so instead of five separate transfers you might only need two.
+        </p>
+        <p>
+          Splitting a dinner check is the most common reason people search for a bill splitter, and it's exactly what this tool is optimized for. As a <strong class="text-(--color-ink)">restaurant bill split calculator</strong>, it handles the messy parts a plain calculator can't: uneven orders, shared appetizers, and the final tax and tip line. Because it works as a full <strong class="text-(--color-ink)">bill split calculator with tax and tip</strong>, you can add the subtotal, apply a percentage or flat tip, and see the total distributed across the table in seconds. Whether it's a quick lunch or a long dinner, the same <strong class="text-(--color-ink)">food bill split calculator</strong> logic and <strong class="text-(--color-ink)">dinner bill split calculator</strong> workflow make sure nobody quietly overpays for a round of drinks they didn't order. It's a <strong class="text-(--color-ink)">free restaurant bill split calculator</strong> with no ads interrupting the moment the check arrives — plug in the numbers at the table and settle up before dessert.
+        </p>
+        <p>
+          Not every group wants — or should — split things down the middle, so BillSplit Calcs also works as a <strong class="text-(--color-ink)">fair bill split calculator</strong> that adapts to how your group actually shares costs. Choose equal shares for a simple night out, switch to a <strong class="text-(--color-ink)">proportional bill split calculator</strong> mode with weighted shares when one person ate — or drank — more than everyone else, or use exact percentages to build an <strong class="text-(--color-ink)">equitable bill split calculator</strong> that reflects real contributions. The same percentage-based logic doubles as an <strong class="text-(--color-ink)">income bill split calculator</strong> for roommates or partners who prefer to divide rent and bills proportionally to what each person earns, rather than splitting everything equally. You can also exclude specific people from specific expenses entirely, which matters when one line item — a bottle of wine, a taxi, a late checkout fee — genuinely doesn't belong to the whole group.
+        </p>
+        <p>
+          Beyond one-off outings, BillSplit Calcs works as a <strong class="text-(--color-ink)">household bill split calculator</strong> for the recurring costs that come up every month. Use it as a <strong class="text-(--color-ink)">utility bill split calculator</strong> to divide electricity, water, internet, and rent among roommates, or lean on the dedicated Global Split tool as a <strong class="text-(--color-ink)">monthly bill split calculator</strong> that lets everyone log their own spending on their own device and reconcile it together at the end of the month. It's equally suited as a <strong class="text-(--color-ink)">group bill split calculator</strong> for a shared apartment of five or a <strong class="text-(--color-ink)">couple bill split calculator</strong> for two people managing a joint budget — the math scales to however many people are actually splitting the bill.
+        </p>
+        <p>
+          However you use it, this bill split calculator never asks for a login, never stores your data on a server, and never limits how many expenses, currencies, or people you can add. It supports 150+ currencies and a 10+ language interface, so a group splitting a bill in yen, euros, or rupees gets the same accurate math as one splitting dollars. Add your group, log the expenses, and BillSplit Calcs handles the rest — instantly, accurately, and for free.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="bg-(--color-canvas) py-24 border-t border-(--color-hairline)">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3 text-center">FAQ</div>
+      <h2 class="text-3xl md:text-4xl font-semibold text-(--color-ink) tracking-[-1.28px] leading-tight mb-4 text-center">
+        Common questions.
+      </h2>
+      <p class="text-(--color-body) text-center max-w-xl mx-auto mb-10 leading-6">
+        Everything people ask before splitting a restaurant bill, a trip, or a household budget with BillSplit Calcs.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {faqs.map((item) => (
+          <div class="bg-(--color-canvas-soft) rounded-lg border border-(--color-hairline) p-5">
+            <h3 class="text-base font-semibold text-(--color-ink) mb-2">{item.q}</h3>
+            <p class="text-sm text-(--color-body) leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Company & policies -->
+  <section class="bg-(--color-canvas-soft) py-24 border-t border-(--color-hairline)">
+    <div class="max-w-[1400px] mx-auto px-6">
+      <div class="text-center mb-14">
+        <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Company</div>
+        <h2 class="text-4xl font-semibold text-(--color-ink) tracking-[-1.28px] leading-tight">
+          Get to know BillSplit Calcs.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          {
+            href: '/about',
+            title: 'About Us',
+            desc: 'Why we built a free bill splitter and how it stays privacy-first.',
+            icon: 'M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 11h.01',
+          },
+          {
+            href: '/contact',
+            title: 'Contact Us',
+            desc: "Feedback, bug reports, or feature requests — we read every message.",
+            icon: 'M1.5 3.5h13v9h-13v-9zM2 4.5l6 4.5 6-4.5',
+          },
+          {
+            href: '/privacy',
+            title: 'Privacy Policy',
+            desc: 'No accounts, no server storage — your data stays on your device.',
+            icon: 'M8 1.5l5.5 2v4c0 3.5-2.3 5.9-5.5 7-3.2-1.1-5.5-3.5-5.5-7v-4l5.5-2z',
+          },
+          {
+            href: '/terms',
+            title: 'Terms & Conditions',
+            desc: 'The ground rules for using BillSplit Calcs.',
+            icon: 'M4 2h6l2 2v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1zM5.5 6.5h5M5.5 9h5M5.5 11.5h3',
+          },
+        ].map((item) => (
+          <a href={item.href} class="group bg-(--color-canvas) rounded-lg p-6 shadow-l2 hover:shadow-l3 transition-shadow">
+            <div class="w-8 h-8 rounded-md bg-(--color-canvas-soft-2) text-(--color-ink) flex items-center justify-center mb-4">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d={item.icon} stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-(--color-ink) mb-2 tracking-tight group-hover:text-(--color-link) transition-colors">{item.title}</h3>
+            <p class="text-sm text-(--color-body) leading-relaxed">{item.desc}</p>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 

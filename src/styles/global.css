@@ -101,7 +101,7 @@ html {
 
 ::selection {
   background-color: var(--color-primary);
-  color: #f2f2f2;
+  color: var(--color-on-primary);
 }
 
 /* Mesh gradient keyframes */

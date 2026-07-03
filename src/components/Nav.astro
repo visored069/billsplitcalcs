@@ -3,38 +3,34 @@ interface Props {
   currentPath?: string;
 }
 const { currentPath = '/' } = Astro.props;
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/app', label: 'Split Bills' },
+  { href: '/global-split', label: 'Global Split' },
+  { href: '/features', label: 'Features' },
+];
 ---
 
 <header class="sticky top-0 z-50 bg-(--color-canvas)/95 backdrop-blur-sm border-b border-(--color-hairline)">
-  <nav class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+  <nav class="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-2">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-2 font-semibold text-sm text-(--color-ink) tracking-tight">
-      <div class="w-6 h-6 rounded-md bg-(--color-ink-fixed) flex items-center justify-center flex-shrink-0">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M2 11L7 3L12 11H2Z" fill="white"/>
-        </svg>
-      </div>
-      BillSplit<span class="text-(--color-mute) font-normal">Calcs</span>
+    <a href="/" class="justify-self-start flex items-center gap-2 font-semibold text-sm text-(--color-ink) tracking-tight flex-shrink-0">
+      <img src="/favicon.svg" width="24" height="24" alt="" class="w-6 h-6 rounded-md flex-shrink-0" />
+      <span class="whitespace-nowrap">BillSplit<span class="text-(--color-mute) font-normal">Calcs</span></span>
     </a>
 
-    <!-- Center links -->
+    <!-- Center links (desktop) — dead-centered via symmetric 1fr side columns -->
     <div class="hidden md:flex items-center gap-2">
-      <a href="/" class={`text-sm font-medium px-3 py-2 rounded-full bg-(--color-primary) text-(--color-on-primary) hover:opacity-90 transition-opacity duration-150 ${currentPath === '/' ? 'ring-2 ring-inset ring-red-500' : ''}`}>
-        Home
-      </a>
-      <a href="/app" class={`text-sm font-medium px-3 py-2 rounded-full bg-(--color-primary) text-(--color-on-primary) hover:opacity-90 transition-opacity duration-150 ${currentPath === '/app' ? 'ring-2 ring-inset ring-red-500' : ''}`}>
-        Split Bills
-      </a>
-      <a href="/features" class={`text-sm font-medium px-3 py-2 rounded-full bg-(--color-primary) text-(--color-on-primary) hover:opacity-90 transition-opacity duration-150 ${currentPath === '/features' ? 'ring-2 ring-inset ring-red-500' : ''}`}>
-        Features
-      </a>
-      <a href="/global-split" class={`text-sm font-medium px-3 py-2 rounded-full bg-(--color-primary) text-(--color-on-primary) hover:opacity-90 transition-opacity duration-150 ${currentPath === '/global-split' ? 'ring-2 ring-inset ring-red-500' : ''}`}>
-        Global Split
-      </a>
+      {links.map((link) => (
+        <a href={link.href} class={`text-sm font-medium px-3 py-2 rounded-full bg-(--color-primary) text-(--color-on-primary) hover:opacity-90 transition-opacity duration-150 ${currentPath === link.href ? 'ring-2 ring-inset ring-red-500' : ''}`}>
+          {link.label}
+        </a>
+      ))}
     </div>
 
     <!-- Right CTAs -->
-    <div class="flex items-center gap-2">
+    <div class="justify-self-end flex items-center gap-1 flex-shrink-0">
       <button
         id="theme-toggle"
         type="button"
@@ -51,7 +47,28 @@ const { currentPath = '/' } = Astro.props;
       </button>
     </div>
   </nav>
+
+  <!-- Nav pills (mobile/tablet) — same pill style as desktop, always visible, horizontally scrollable -->
+  <div class="md:hidden border-t border-(--color-hairline)">
+    <div class="nav-scroll flex items-center gap-2 px-4 py-2.5 overflow-x-auto max-w-[1400px] mx-auto">
+      {links.map((link) => (
+        <a href={link.href} class={`flex-shrink-0 text-sm font-medium px-3.5 py-2 rounded-full whitespace-nowrap bg-(--color-primary) text-(--color-on-primary) hover:opacity-90 transition-opacity duration-150 ${currentPath === link.href ? 'ring-2 ring-inset ring-red-500' : ''}`}>
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
 </header>
+
+<style>
+  .nav-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .nav-scroll::-webkit-scrollbar {
+    display: none;
+  }
+</style>
 
 <script>
   function updateThemeIcon() {

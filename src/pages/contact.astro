@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const contactEmail = 'aashwikchaliganti@gmail.com';
+
+const contactSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact BillSplit Calcs',
+  url: 'https://www.billsplitcalcs.com/contact',
+};
+---
+
+<Layout
+  title="Contact Us — BillSplit Calcs"
+  description="Get in touch with the BillSplit Calcs team with feedback, bug reports, or feature requests for our free bill split calculator."
+  keywords="contact billsplit calcs, bill splitter support"
+  schema={contactSchema}
+>
+  <Nav currentPath="/contact" />
+
+  <main class="min-h-screen bg-(--color-canvas-soft) py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-10">
+        <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Support</div>
+        <h1 class="text-4xl md:text-5xl font-semibold text-(--color-ink) tracking-[-1.6px] leading-tight mb-3">Get in touch</h1>
+        <p class="text-(--color-body)">Feedback, bug reports, and feature requests are all welcome.</p>
+      </div>
+
+      <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 p-6 md:p-10">
+        <div class="space-y-6 text-(--color-body) leading-7">
+          <p>
+            BillSplit Calcs is a small, independent tool — there's no support ticket system or call center, just a real inbox. If something's broken, confusing, or missing, email us directly and we'll read it.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-(--color-canvas-soft) border border-(--color-hairline) rounded-lg px-5 py-4">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" class="text-(--color-mute) flex-shrink-0"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 4.5l6 4.5 6-4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <a
+              href={`mailto:${contactEmail}`}
+              class="text-base font-medium text-(--color-ink) hover:text-(--color-link) transition-colors break-all"
+            >
+              {contactEmail}
+            </a>
+          </div>
+
+          <p class="text-sm text-(--color-mute)">
+            We try to respond within a few business days. For quick answers about how splitting, tax/tip, or currencies work, check the <a href="/#faq" class="text-(--color-link) hover:underline">FAQ on the homepage</a> first — your question might already be answered there.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

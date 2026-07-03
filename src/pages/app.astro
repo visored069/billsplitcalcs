@@ -2,9 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Bill Splitter — BillSplit Calcs',
+  url: 'https://www.billsplitcalcs.com/app',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any (Web-based)',
+  description:
+    'Free bill split calculator with tax and tip. Split restaurant, dinner, and group bills fairly using equal, percentage, or share-based splits — 150+ currencies, no signup.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
 ---
 
-<Layout title="Bill Splitter — BillSplit Calcs">
+<Layout
+  title="Bill Split Calculator with Tax & Tip — Bill Splitter | BillSplit Calcs"
+  description="Split any restaurant, dinner, or group bill fairly with this free online bill split calculator. Add tax and tip, split equally or by percentage/shares, and see who owes whom instantly."
+  keywords="bill splitter, bill split calculator with tax and tip, restaurant bill split calculator, dinner bill split calculator, fair bill split calculator, equitable bill split calculator, proportional bill split calculator, food bill split calculator, group bill split calculator, couple bill split calculator, online bill split calculator, bill split calculator online"
+  schema={appSchema}
+>
   <Nav currentPath="/app" />
 
   <main class="min-h-screen bg-(--color-canvas-soft) py-8 px-4">
@@ -16,7 +33,7 @@ import Footer from '../components/Footer.astro';
           <h1 class="text-2xl font-semibold text-(--color-ink) tracking-tight">Bill Splitter</h1>
           <p class="text-sm text-(--color-body) mt-0.5">Add expenses, see who owes whom.</p>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
           <!-- Language selector -->
           <select id="lang-select" class="custom-select h-8 pl-3 pr-8 text-xs text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-md appearance-none cursor-pointer hover:border-(--color-hairline-strong) transition-colors focus:outline-none focus:ring-1 focus:ring-(--color-primary)">
             <option value="en">English</option>

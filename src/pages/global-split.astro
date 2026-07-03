@@ -2,9 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+
+const globalSplitSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Global Split — BillSplit Calcs',
+  url: 'https://www.billsplitcalcs.com/global-split',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any (Web-based)',
+  description:
+    'Free monthly bill split calculator for households and roommates. Log utility, rent, and group expenses from anywhere and reconcile everyone\'s spending at month\'s end.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
 ---
 
-<Layout title="Global Split — BillSplit Calcs" description="Log group expenses from anywhere, on any date, then reconcile everyone's spending together at month's end.">
+<Layout
+  title="Monthly Household Bill Split Calculator — Global Split | BillSplit Calcs"
+  description="A free monthly bill split calculator for households and roommates. Log utility bills, rent, and group expenses from anywhere, on any date, then reconcile everyone's spending together at month's end."
+  keywords="monthly bill split calculator, household bill split calculator, utility bill split calculator, group bill split calculator, income bill split calculator, bill splitter, online bill split calculator"
+  schema={globalSplitSchema}
+>
   <Nav currentPath="/global-split" />
 
   <main class="min-h-screen bg-(--color-canvas-soft) py-8 px-4">
@@ -16,7 +33,7 @@ import Footer from '../components/Footer.astro';
           <h1 class="text-2xl font-semibold text-(--color-ink) tracking-tight">Global Split</h1>
           <p class="text-sm text-(--color-body) mt-0.5">Everyone logs their own spending, whenever, wherever. Reconcile as a group at month's end.</p>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
           <!-- Currency selector -->
           <select id="gs-currency-select" class="custom-select h-8 pl-3 pr-8 text-xs text-(--color-body) bg-(--color-canvas) border border-(--color-hairline) rounded-md appearance-none cursor-pointer hover:border-(--color-hairline-strong) transition-colors focus:outline-none focus:ring-1 focus:ring-(--color-primary)">
           </select>
@@ -234,7 +251,7 @@ import Footer from '../components/Footer.astro';
             <div id="gs-entry-list" class="divide-y divide-(--color-hairline) min-h-[60px]">
               <!-- JS rendered -->
             </div>
-            <div id="gs-entry-empty" class="px-4 py-8 text-center">
+            <div id="gs-entry-empty" class="min-h-[220px] flex flex-col items-center justify-center text-center px-4">
               <div class="text-sm text-(--color-mute)">No expenses logged for this period.</div>
               <div class="text-xs text-(--color-mute) mt-1">Add one above, or sync to pull in the group's entries.</div>
             </div>

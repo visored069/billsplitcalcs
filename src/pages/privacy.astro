@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Privacy Policy — BillSplit Calcs"
+  description="Read how BillSplit Calcs handles your data: no accounts, no server-side storage, no tracking. Your group and expense data stays in your browser."
+  keywords="billsplit calcs privacy policy, bill splitter privacy"
+>
+  <Nav currentPath="/privacy" />
+
+  <main class="min-h-screen bg-(--color-canvas-soft) py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-10">
+        <div class="font-mono text-xs uppercase tracking-widest text-(--color-mute) mb-3">Legal</div>
+        <h1 class="text-4xl md:text-5xl font-semibold text-(--color-ink) tracking-[-1.6px] leading-tight mb-3">Privacy Policy</h1>
+        <p class="text-(--color-body)">Last updated: July 3, 2026</p>
+      </div>
+
+      <div class="bg-(--color-canvas) rounded-lg border border-(--color-hairline) shadow-l2 p-6 md:p-10 space-y-8 text-(--color-body) leading-7">
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Overview</h2>
+          <p>
+            BillSplit Calcs ("we", "us", "the Service") is designed around a simple principle: we don't want your data, so we don't collect it. This policy explains what little information touches our systems and, more importantly, what stays entirely on your own device.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Information we collect</h2>
+          <p>
+            We do not require an account, email address, or any personal information to use BillSplit Calcs. The group names, member names, and expense amounts you enter are provided voluntarily by you for the sole purpose of calculating a split, and none of it is transmitted to or stored on our servers.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Where your data lives</h2>
+          <p>
+            Your groups, members, and expenses are saved using your browser's local storage, on your own device. When you use a "Share" or "Sync" link, your data is encoded directly into the URL itself (or into an exported file) — it is never uploaded to or processed by a BillSplit Calcs server. Anyone who opens that link decodes the data locally in their own browser. If you clear your browser storage or use a different device, that locally saved data is gone unless you've exported or shared it yourself.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Cookies and local storage</h2>
+          <p>
+            We use browser local storage for two things only: remembering your light/dark theme preference and saving your bill-splitting data between visits. We do not use tracking cookies, advertising cookies, or any cookie-based analytics.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Third-party services</h2>
+          <p>
+            This site loads web fonts from Google Fonts. As with any external resource, Google may log standard request data such as your IP address when your browser fetches those fonts — this is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-(--color-link) hover:underline">Google's Privacy Policy</a>, not ours. If you use a share option like WhatsApp, Email, or social platforms, you're taken to that platform's own service, which has its own privacy practices.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Analytics and advertising</h2>
+          <p>
+            BillSplit Calcs does not currently run analytics scripts, tracking pixels, or advertising of any kind. If that ever changes, this policy will be updated first, along with the "Last updated" date above.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Children's privacy</h2>
+          <p>
+            BillSplit Calcs is not directed at children under 13, and we do not knowingly collect personal information from anyone, regardless of age — see "Where your data lives" above.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Data security</h2>
+          <p>
+            Because there is no central database of user data, there's no server-side store of your bill-splitting information to breach. That said, anyone with access to your device or a share link you've distributed can view the data it contains, so treat share links the same way you'd treat any other private information.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Changes to this policy</h2>
+          <p>
+            We may update this Privacy Policy from time to time to reflect changes to the Service. Material changes will update the "Last updated" date at the top of this page.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-(--color-ink) mb-3">Contact us</h2>
+          <p>
+            Questions about this policy? Reach out via our <a href="/contact" class="text-(--color-link) hover:underline">Contact page</a>.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
