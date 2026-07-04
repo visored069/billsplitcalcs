@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Page Not Found — BillSplit Calcs"
+  description="This page doesn't exist. Head back to BillSplit Calcs to split a bill, manage recurring expenses, or find what you were looking for."
+>
+  <Nav currentPath="/404" />
+
+  <main class="min-h-[70vh] flex items-center bg-(--color-canvas-soft) py-16 px-4">
+    <div class="max-w-lg mx-auto text-center">
+      <div class="font-mono text-sm font-medium text-(--color-mute) tracking-widest mb-4">404</div>
+      <h1 class="text-4xl md:text-5xl font-semibold text-(--color-ink) tracking-[-1.6px] leading-tight mb-4">
+        Page not found
+      </h1>
+      <p class="text-(--color-body) mb-10">
+        The page you're looking for doesn't exist or may have moved. Let's get you back to splitting bills.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="/" class="inline-flex items-center justify-center h-12 px-6 text-base font-medium text-(--color-on-primary) bg-(--color-primary) rounded-full hover:opacity-90 transition-opacity duration-150 min-w-[160px]">
+          Back to Home
+        </a>
+        <a href="/app" class="inline-flex items-center justify-center h-12 px-6 text-base font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-full hover:bg-(--color-canvas-soft) transition-colors duration-150 min-w-[160px]">
+          Split a Bill
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

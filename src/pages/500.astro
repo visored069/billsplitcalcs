@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Something Went Wrong — BillSplit Calcs"
+  description="Something went wrong on our end. Try refreshing the page or head back to BillSplit Calcs."
+>
+  <Nav currentPath="/500" />
+
+  <main class="min-h-[70vh] flex items-center bg-(--color-canvas-soft) py-16 px-4">
+    <div class="max-w-lg mx-auto text-center">
+      <div class="font-mono text-sm font-medium text-(--color-mute) tracking-widest mb-4">500</div>
+      <h1 class="text-4xl md:text-5xl font-semibold text-(--color-ink) tracking-[-1.6px] leading-tight mb-4">
+        Something went wrong
+      </h1>
+      <p class="text-(--color-body) mb-10">
+        An unexpected error occurred on our end. Your data is safe — everything lives in your browser, not on our servers. Try refreshing, or head back home.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button
+          id="reload-btn"
+          type="button"
+          class="inline-flex items-center justify-center h-12 px-6 text-base font-medium text-(--color-on-primary) bg-(--color-primary) rounded-full hover:opacity-90 transition-opacity duration-150 min-w-[160px]"
+        >
+          Try Again
+        </button>
+        <a href="/" class="inline-flex items-center justify-center h-12 px-6 text-base font-medium text-(--color-ink) bg-(--color-canvas) border border-(--color-hairline) rounded-full hover:bg-(--color-canvas-soft) transition-colors duration-150 min-w-[160px]">
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  document.getElementById('reload-btn')?.addEventListener('click', () => {
+    window.location.reload();
+  });
+</script>
